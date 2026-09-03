@@ -1,0 +1,39 @@
+name: Deploy theme to Masterhost
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy live theme
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          set -eu
+
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+
+          printf '%s\n' "$DEPLOY_SSH_KEY" > "$HOME/.ssh/orh_deploy"
+          chmod 600 "$HOME/.ssh/orh_deploy"
+
+          ssh-keyscan -H "$DEPLOY_HOST" >> "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+          ssh -i "$HOME/.ssh/orh_deploy" -o IdentitiesOnly=yes "$DEPLOY_USER@$DEPLOY_HOST" 'set -eu
+            THEME=/home/u545465/online-radio-hit.ru/www/wp-content/themes/online-radio-hit-v46-final
+            cd "$THEME"
+            git fetch origin master
+            git reset --hard origin/master
+          '
+
+      - name: Deployment complete
+        run: echo "Theme deployment completed successfully."
