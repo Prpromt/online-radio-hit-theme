@@ -1,0 +1,1 @@
+<footer><div class="footer-brand"><span class="brand-mark">H</span><strong>ОНЛАЙН РАДИО ХИТ</strong></div><span>Музыка • Артисты • Чарт • Эфир</span><span>© <?php echo esc_html(date('Y')); ?></span></footer><?php wp_footer(); ?></body></html>

@@ -1,0 +1,1 @@
+<?php get_header(); ?><main class="section"><div class="eyebrow">ОНЛАЙН РАДИО ХИТ</div><h1>Страница</h1><?php if(have_posts()):while(have_posts()):the_post();the_content();endwhile;endif;?></main><?php get_footer(); ?>
