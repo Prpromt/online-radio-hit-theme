@@ -1,0 +1,56 @@
+/* Batch mobile stability fixes for Cloudflare Preview */
+@media (max-width:900px){
+  .header-inner{position:relative;gap:10px}
+  .header-cta{max-width:190px;text-align:center;line-height:1.15}
+  .menu{display:grid;place-items:center;width:42px;height:42px;padding:0;cursor:pointer;flex:0 0 42px}
+  .site-header nav{display:none;position:absolute;left:0;right:0;top:100%;z-index:100;background:#fff;border:1px solid var(--line);border-radius:0 0 14px 14px;padding:8px;box-shadow:0 14px 30px rgba(20,25,30,.10);margin:0}
+  .site-header nav.is-open{display:grid}
+  .site-header nav a{padding:13px 12px;border-radius:9px;font-size:13px}
+  .hero-grid,.hero-copy,.player,.card,.promotion-preview,.releases,.artist-block,.mailing{min-width:0}
+  .actions{flex-wrap:wrap}
+  .actions>*{min-height:44px}
+  .player-main,.player-bottom,.seek,.volume{min-width:0}
+}
+@media (max-width:560px){
+  .header-inner{min-height:62px}
+  .brand{min-width:0}
+  .brand span{font-size:10px}
+  .brand b{font-size:20px}
+  .header-cta{font-size:8px;padding:9px 8px;max-width:132px}
+  .hero-copy h1{font-size:clamp(36px,11vw,48px);overflow-wrap:anywhere}
+  .station-name{flex-wrap:wrap;gap:5px}
+  .actions{display:grid;grid-template-columns:1fr;gap:9px}
+  .actions>*{width:100%}
+  .facts{gap:10px}
+  .facts b{font-size:12px}
+  .facts small{font-size:10px}
+  .player-main{grid-template-columns:78px minmax(0,1fr);gap:11px}
+  .player-info h2{font-size:19px}
+  .player-info p{font-size:11px}
+  .player-controls{width:100%;justify-content:space-between}
+  .player-controls button{flex:0 0 34px}
+  .player-controls .play{flex-basis:43px}
+  .player-bottom{gap:12px}
+  .volume{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px}
+  .mini-track{grid-template-columns:18px 42px minmax(0,1fr) 34px;gap:8px}
+  .track-copy b,.track-copy small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .chart-row{grid-template-columns:18px 38px minmax(0,1fr) 42px;gap:8px}
+  .chart-row b,.chart-row small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .quick-links{grid-template-columns:1fr 1fr}
+  .quick-links a{padding:16px 12px;min-width:0}
+  .quick-links b,.quick-links small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .release-grid{grid-template-columns:1fr 1fr}
+  .release-cover{font-size:34px}
+  .artist-block h2,.mailing h2{overflow-wrap:anywhere}
+  .mailing input,.mailing button{width:100%;min-height:44px}
+  .sticky{bottom:8px;width:calc(100% - 16px);grid-template-columns:38px minmax(0,1fr) 38px;gap:8px}
+}
+@media (max-width:360px){
+  .container{width:calc(100% - 16px)}
+  .header-cta{max-width:112px;font-size:7px}
+  .menu{width:38px;flex-basis:38px}
+  .player-main{grid-template-columns:66px minmax(0,1fr)}
+  .cover-art{font-size:38px}
+  .player-info h2{font-size:17px}
+  .release-grid{grid-template-columns:1fr}
+}
