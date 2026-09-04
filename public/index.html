@@ -5,7 +5,7 @@
 <title>Онлайн Радио ХИТ — тестовый стенд</title>
 <meta name="description" content="Тестовый стенд дизайна Онлайн Радио Хит.">
 <link rel="stylesheet" href="/assets/app.css">
-<link rel="stylesheet" href="/assets/mobile-fixes.css">
+<link rel="stylesheet" href="/assets/mobile-fixes.css?v=3">
 </head>
 <body>
 <header class="site-header"><div class="container header-inner"><a class="brand" href="#radio"><span>ОНЛАЙН РАДИО</span><b>ХИТ</b></a><nav id="mainNav"><a href="#chart">Чарт</a><a href="#artists">Артисты</a><a href="#news">Новости</a><a href="#promotion-directions">Продвижение</a></nav><a class="header-cta" href="#artist">Выставить Песню на Радио</a><button class="menu" id="menuBtn" aria-expanded="false" aria-label="Открыть меню">☰</button></div></header>
@@ -21,7 +21,7 @@
 <section class="mailing container"><div><div class="eyebrow">ЕДИНАЯ РАССЫЛКА</div><h2>Новости и новые услуги<br>Продюсерского центра</h2></div><form id="mailForm"><p>Одна рассылка для подписчиков всех музыкальных сайтов.</p><input type="email" required placeholder="Ваш email"><button class="primary">Подписаться</button><small id="mailMsg"></small></form></section>
 </main>
 <div class="sticky" id="sticky"><div class="sticky-cover">H</div><div class="sticky-info"><small>СЕЙЧАС ИГРАЕТ</small><b id="stickyTitle">Тестовый эфир</b><span id="stickyArtist">Онлайн Радио Хит</span><small id="stickyTime">0:00</small></div><button id="stickyPlay" aria-label="Воспроизвести"><span class="play-shape"></span></button><a href="#radio">Плеер ↑</a></div>
-<script src="/assets/app.js"></script>
+<script src="/assets/app.js?v=3"></script>
 <script>
 (()=>{const menu=document.getElementById('menuBtn'),nav=document.getElementById('mainNav');if(!menu||!nav)return;menu.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const open=nav.classList.toggle('is-open');menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Закрыть меню':'Открыть меню')});nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('is-open');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Открыть меню')}));})();
 </script>
