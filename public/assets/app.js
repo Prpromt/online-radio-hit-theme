@@ -3,16 +3,43 @@
   const audio=$('#audio'), progress=$('#progress'), volume=$('#volume');
   const currentTime=$('#currentTime'), duration=$('#duration'), stickyTime=$('#stickyTime');
   const title=$('#currentTitle'), artist=$('#currentArtist'), ticker=$('#tickerTitle');
-  const stickyTitle=$('#stickyTitle'), stickyArtist=$('#stickyArtist'), eq=$('#eq');
+  const stickyTitle=$('#stickyTitle'), stickyArtist=$('#stickyArtist'), eq=$('#eq'), coverArt=$('#coverArt');
   if(!audio) return;
-  const songs=[['Ночной город','KARAT'],['Jumanji','KARAT & МЛАДШИЙ'],['Ты такая славная','Вячеслав Калинин'],['Просто я ищу тебя','Новый артист'],['Летуаль','PELIKUANA'],['Когда расцветает сирень','Андрей Додонов']];
+
+  const songs=[
+    ['Ночной город','KARAT','https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=85'],
+    ['Jumanji','KARAT & МЛАДШИЙ','https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=85'],
+    ['Ты такая славная','Вячеслав Калинин','https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=85'],
+    ['Просто я ищу тебя','Новый артист','https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=900&q=85'],
+    ['Летуаль','PELIKUANA','https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=85'],
+    ['Когда расцветает сирень','Андрей Додонов','https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=85']
+  ];
   let index=0, repeat=false;
   const fmt=s=>Number.isFinite(s)?Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0'):'0:00';
   const trackButtons=()=>$$('[data-track]');
+
+  function artwork(i){
+    const url=songs[i][2];
+    if(coverArt){
+      coverArt.style.backgroundImage=`linear-gradient(145deg,rgba(10,12,20,.05),rgba(255,79,163,.16)),url("${url}")`;
+      coverArt.style.backgroundSize='cover';
+      coverArt.style.backgroundPosition='center';
+    }
+    $$('.mini-cover,.chart-cover,.release-cover').forEach(b=>{
+      const n=Number(b.dataset.track);
+      if(Number.isInteger(n)&&songs[n]){
+        b.style.backgroundImage=`linear-gradient(145deg,rgba(10,12,20,.04),rgba(255,79,163,.12)),url("${songs[n][2]}")`;
+        b.style.backgroundSize='cover';
+        b.style.backgroundPosition='center';
+      }
+    });
+  }
+
   function setTrack(i,play=false){
     index=(i+songs.length)%songs.length;
     const [t,a]=songs[index];
     title.textContent=t; artist.textContent=a; ticker.textContent=t; stickyTitle.textContent=t; stickyArtist.textContent=a;
+    artwork(index);
     audio.currentTime=0;
     if(play) audio.play().catch(()=>{});
     sync();
@@ -42,11 +69,13 @@
   audio.addEventListener('ended',()=>repeat?audio.play().catch(()=>{}):setTrack(index+1,true));
   progress?.addEventListener('input',()=>{if(audio.duration)audio.currentTime=progress.value/100*audio.duration});
   volume?.addEventListener('input',()=>audio.volume=Number(volume.value)); audio.volume=.8;
+
   function row(song,i){return `<div class="mini-track"><strong>${i+1}</strong><button class="mini-cover" data-track="${i}" aria-label="Слушать ${song[0]}"><span>${song[0][0]}</span></button><div class="track-copy"><b>${song[0]}</b><small>${song[1]}</small></div><button class="mini-play" data-track="${i}" aria-label="Воспроизвести"><span class="play-shape"></span></button><span class="mini-plays">${(1200-i*137).toLocaleString('ru-RU')}</span></div>`}
   $('#popular').innerHTML=songs.slice(0,3).map(row).join('');
-  $('#chartRows').innerHTML=songs.slice(0,5).map((s,i)=>`<div class="chart-row"><strong>${i+1}</strong><span class="chart-cover">${s[0][0]}</span><div><b>${s[0]}</b><small>${s[1]}</small></div><span class="wave"><i></i><i></i><i></i><i></i><i></i></span><em>${(3200-i*410).toLocaleString('ru-RU')}</em></div>`).join('');
+  $('#chartRows').innerHTML=songs.slice(0,5).map((s,i)=>`<div class="chart-row"><strong>${i+1}</strong><button class="chart-cover" data-track="${i}" aria-label="Слушать ${s[0]}">${s[0][0]}</button><div><b>${s[0]}</b><small>${s[1]}</small></div><span class="wave"><i></i><i></i><i></i><i></i><i></i></span><em>${(3200-i*410).toLocaleString('ru-RU')}</em></div>`).join('');
   $('#releasesGrid').innerHTML=songs.map((s,i)=>`<article class="release-card"><button class="release-cover" data-track="${i}" aria-label="Слушать ${s[0]}"><span>${s[0][0]}</span><i class="play-icon"></i></button><div><small>ПРЕМЬЕРА</small><h3>${s[0]}</h3><p>${s[1]}</p></div></article>`).join('');
   $$('[data-track]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();setTrack(Number(b.dataset.track),true)}));
+  artwork(index);
   const sticky=$('#sticky'); let last=scrollY;
   addEventListener('scroll',()=>{const down=scrollY>last;sticky.classList.toggle('visible',down&&scrollY>280);last=scrollY},{passive:true});
   $('#mailForm')?.addEventListener('submit',e=>{e.preventDefault();$('#mailMsg').textContent='В тестовом стенде форма работает локально. На WordPress подключим обработчик.'});
