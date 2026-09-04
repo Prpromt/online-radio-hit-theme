@@ -5,7 +5,6 @@
   const title=$('#currentTitle'), artist=$('#currentArtist'), ticker=$('#tickerTitle');
   const stickyTitle=$('#stickyTitle'), stickyArtist=$('#stickyArtist'), eq=$('#eq'), coverArt=$('#coverArt');
   if(!audio) return;
-
   const songs=[
     ['Ночной город','KARAT','https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=85'],
     ['Jumanji','KARAT & МЛАДШИЙ','https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=85'],
@@ -14,35 +13,33 @@
     ['Летуаль','PELIKUANA','https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=85'],
     ['Когда расцветает сирень','Андрей Додонов','https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=85']
   ];
+  const fallbacks=[
+    'linear-gradient(145deg,#171b26,#6b315d 55%,#ff4fa3)',
+    'linear-gradient(145deg,#171b26,#314f73 48%,#ff4fa3)',
+    'linear-gradient(145deg,#f5f6f3,#b9c5d5 48%,#ff4fa3)',
+    'linear-gradient(145deg,#171b26,#49316e 48%,#ff4fa3)',
+    'linear-gradient(145deg,#fff0f7,#ff8bc4 48%,#171b26)',
+    'linear-gradient(145deg,#eaf2dc,#d9ff32 48%,#ff4fa3)'
+  ];
   let index=0, repeat=false;
   const fmt=s=>Number.isFinite(s)?Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0'):'0:00';
   const trackButtons=()=>$$('[data-track]');
-
-  function artwork(i){
+  function setArtwork(el,i){
+    if(!el||!songs[i]) return;
     const url=songs[i][2];
-    if(coverArt){
-      coverArt.style.backgroundImage=`linear-gradient(145deg,rgba(10,12,20,.05),rgba(255,79,163,.16)),url("${url}")`;
-      coverArt.style.backgroundSize='cover';
-      coverArt.style.backgroundPosition='center';
-    }
-    $$('.mini-cover,.chart-cover,.release-cover').forEach(b=>{
-      const n=Number(b.dataset.track);
-      if(Number.isInteger(n)&&songs[n]){
-        b.style.backgroundImage=`linear-gradient(145deg,rgba(10,12,20,.04),rgba(255,79,163,.12)),url("${songs[n][2]}")`;
-        b.style.backgroundSize='cover';
-        b.style.backgroundPosition='center';
-      }
-    });
+    el.style.backgroundImage=`linear-gradient(145deg,rgba(0,0,0,.04),rgba(255,79,163,.12)),url("${url}"),${fallbacks[i]}`;
+    el.style.backgroundSize='cover'; el.style.backgroundPosition='center'; el.style.backgroundColor='#f1f2ef';
   }
-
+  function artwork(i){
+    setArtwork(coverArt,i);
+    $$('.mini-cover,.chart-cover,.release-cover').forEach(b=>{const n=Number(b.dataset.track);if(Number.isInteger(n)&&songs[n])setArtwork(b,n)});
+  }
   function setTrack(i,play=false){
     index=(i+songs.length)%songs.length;
     const [t,a]=songs[index];
     title.textContent=t; artist.textContent=a; ticker.textContent=t; stickyTitle.textContent=t; stickyArtist.textContent=a;
-    artwork(index);
-    audio.currentTime=0;
-    if(play) audio.play().catch(()=>{});
-    sync();
+    artwork(index); audio.currentTime=0;
+    if(play) audio.play().catch(()=>{}); sync();
   }
   function sync(){
     const playing=!audio.paused;
@@ -50,13 +47,11 @@
     $('#listenBtn')?.classList.toggle('is-playing',playing);
     $('#stickyPlay')?.classList.toggle('is-playing',playing);
     eq?.classList.toggle('playing',playing);
-    $$('.play-shape,.icon.play').forEach(el=>el.classList.toggle('pause',playing));
-    trackButtons().forEach(b=>b.classList.toggle('is-playing',playing && Number(b.dataset.track)===index));
+    $('#mainPlay .icon.play')?.classList.toggle('is-pause',playing);
+    $('#stickyPlay .play-shape')?.classList.toggle('is-pause',playing);
+    trackButtons().forEach(b=>b.classList.toggle('is-playing',playing&&Number(b.dataset.track)===index));
   }
-  async function toggle(){
-    if(audio.paused){try{await audio.play()}catch(e){console.warn('Воспроизведение недоступно:',e)}}else audio.pause();
-    sync();
-  }
+  async function toggle(){if(audio.paused){try{await audio.play()}catch(e){console.warn('Воспроизведение недоступно:',e)}}else audio.pause();sync()}
   $('#mainPlay')?.addEventListener('click',e=>{e.preventDefault();toggle()});
   $('#listenBtn')?.addEventListener('click',e=>{e.preventDefault();toggle()});
   $('#stickyPlay')?.addEventListener('click',e=>{e.preventDefault();toggle()});
@@ -69,7 +64,6 @@
   audio.addEventListener('ended',()=>repeat?audio.play().catch(()=>{}):setTrack(index+1,true));
   progress?.addEventListener('input',()=>{if(audio.duration)audio.currentTime=progress.value/100*audio.duration});
   volume?.addEventListener('input',()=>audio.volume=Number(volume.value)); audio.volume=.8;
-
   function row(song,i){return `<div class="mini-track"><strong>${i+1}</strong><button class="mini-cover" data-track="${i}" aria-label="Слушать ${song[0]}"><span>${song[0][0]}</span></button><div class="track-copy"><b>${song[0]}</b><small>${song[1]}</small></div><button class="mini-play" data-track="${i}" aria-label="Воспроизвести"><span class="play-shape"></span></button><span class="mini-plays">${(1200-i*137).toLocaleString('ru-RU')}</span></div>`}
   $('#popular').innerHTML=songs.slice(0,3).map(row).join('');
   $('#chartRows').innerHTML=songs.slice(0,5).map((s,i)=>`<div class="chart-row"><strong>${i+1}</strong><button class="chart-cover" data-track="${i}" aria-label="Слушать ${s[0]}">${s[0][0]}</button><div><b>${s[0]}</b><small>${s[1]}</small></div><span class="wave"><i></i><i></i><i></i><i></i><i></i></span><em>${(3200-i*410).toLocaleString('ru-RU')}</em></div>`).join('');
