@@ -19,13 +19,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout preview branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Deploy to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: '4'
           command: deploy --config wrangler.toml
 
       - name: Deployment complete
