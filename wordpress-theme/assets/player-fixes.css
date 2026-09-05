@@ -1,0 +1,22 @@
+/* Онлайн Радио Хит — player master fixes */
+.player-v13{overflow:hidden}
+.player-v13 .cover-v13{position:relative;overflow:hidden;background:#111;aspect-ratio:1;border-radius:20px}
+.player-v13 .cover-v13 img{display:block;width:100%;height:100%;object-fit:cover}
+.player-v13 .player-controls{display:flex;align-items:center;justify-content:flex-start;gap:10px}
+.player-v13 .player-controls button{display:grid;place-items:center;width:42px;height:42px;border:0;border-radius:50%;background:transparent;color:#111;cursor:pointer;padding:0}
+.player-v13 .player-controls button:hover{background:#fff0f6;color:#ff2875}
+.player-v13 .player-controls button[data-repeat-toggle]{display:none}
+.player-v13 .player-controls .play{width:58px;height:58px;background:#ff2875;color:#fff;border:3px solid #fff;box-shadow:0 8px 22px rgba(255,40,117,.28)}
+.player-v13 .player-controls .play:hover{background:#ff2875;color:#fff}
+.player-v13 .orh-icon{position:relative;display:block;width:20px;height:20px}
+.player-v13 .orh-icon.prev:before,.player-v13 .orh-icon.next:before{content:"";position:absolute;top:5px;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent}
+.player-v13 .orh-icon.prev:before{left:2px;border-right:8px solid currentColor}.player-v13 .orh-icon.next:before{right:2px;border-left:8px solid currentColor}
+.player-v13 .orh-icon.prev:after,.player-v13 .orh-icon.next:after{content:"";position:absolute;top:4px;width:2px;height:12px;background:currentColor}.player-v13 .orh-icon.prev:after{left:0}.player-v13 .orh-icon.next:after{right:0}
+.player-v13 .orh-icon.repeat:before{content:"↻";font-size:21px;line-height:20px;font-weight:700}
+.player-v13 .orh-icon:not(.prev):not(.next):not(.repeat):before{content:"";position:absolute;left:7px;top:4px;border-left:9px solid currentColor;border-top:6px solid transparent;border-bottom:6px solid transparent}
+.player-v13 .player-controls .play .orh-icon.pause:before{left:5px;top:3px;width:5px;height:14px;border:0;background:currentColor;box-shadow:8px 0 0 currentColor}
+.player-v13 .radio-seek-wrap{flex:1;min-width:130px}.player-v13 .radio-time{display:flex;justify-content:space-between;font-size:10px;color:#737a85;margin-bottom:5px}.player-v13 .radio-progress,.player-v13 .radio-volume{display:block;width:100%;height:4px;accent-color:#ff2875;cursor:pointer}.player-v13 .radio-volume-wrap{width:150px;min-width:110px;display:flex;align-items:center;gap:9px;margin-left:auto}.player-v13 .volume-label{font-size:9px;letter-spacing:.05em;color:#737a85;white-space:nowrap}
+.player-v13 .equalizer i{background:#ff2875}
+@media(max-width:900px){.player-v13 .player-bottom-v13{flex-wrap:wrap;gap:14px}.player-v13 .player-controls{width:100%;justify-content:center}.player-v13 .radio-seek-wrap{width:100%;order:2}.player-v13 .radio-volume-wrap{width:42%;min-width:125px;max-width:190px;margin-left:auto;order:3}}
+@media(max-width:560px){.player-v13{padding:16px;border-radius:22px}.player-v13 .player-main{display:grid;grid-template-columns:minmax(150px,44%) 1fr;gap:14px;align-items:center}.player-v13 .cover-v13{margin:0;width:100%;border-radius:16px}.player-v13 .player-info h2{font-size:24px;line-height:1.02}.player-v13 .player-controls .play{width:56px;height:56px}.player-v13 .player-controls button:not(.play){width:38px;height:38px}.player-v13 .radio-volume-wrap{width:48%;min-width:135px}.player-v13 .volume-label{font-size:8px}}
+@media(max-width:390px){.player-v13 .player-main{grid-template-columns:minmax(138px,42%) 1fr}.player-v13 .player-controls{gap:5px}.player-v13 .player-controls .play{width:52px;height:52px}.player-v13 .player-controls button:not(.play){width:34px;height:34px}.player-v13 .radio-volume-wrap{width:52%;min-width:125px}}
