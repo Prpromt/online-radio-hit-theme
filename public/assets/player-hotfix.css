@@ -1,51 +1,48 @@
 /* Online Radio Hit — player/mobile batch fix */
 :root{--radio-pink:#ff4fa3;--radio-black:#111318;--radio-white:#fff}
-
-/* Never show native/emoji play triangles in control buttons. */
-.player-controls button,.mini-play,.release-cover{font-family:Inter,Arial,sans-serif}
+.player-controls button{font-size:0!important;background:#f4f5f3!important;color:var(--radio-black)!important}
 .player-controls .play{background:var(--radio-pink)!important;color:#fff!important;border:4px solid #fff!important;box-shadow:0 8px 24px rgba(255,79,163,.28)!important}
-.player-controls .play .orh-icon{position:relative;display:block!important;width:20px!important;height:20px!important;font-size:0!important;border:0!important}
+.player-controls .orh-icon{position:relative;display:block!important;width:18px!important;height:18px!important;font-size:0!important;border:0!important}
+.player-controls .play .orh-icon{width:20px!important;height:20px!important}
 .player-controls .play .orh-icon:before{content:"";position:absolute;left:6px;top:3px;width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:11px solid currentColor}
-.player-controls .play .orh-icon.is-pause:before,.player-controls .play .orh-icon.is-pause:after{content:"";position:absolute;top:2px;width:4px;height:16px;background:currentColor;border:0}
+.player-controls .play .orh-icon.is-pause:before,.player-controls .play .orh-icon.is-pause:after{content:"";position:absolute;top:2px;width:4px;height:16px;background:currentColor}
 .player-controls .play .orh-icon.is-pause:before{left:3px}.player-controls .play .orh-icon.is-pause:after{left:12px}
-
-/* Secondary controls remain real CSS icons, not text glyphs. */
-.player-controls .orh-icon{position:relative;display:block;width:18px;height:18px;font-size:0;color:currentColor}
 .player-controls .orh-icon.prev:before,.player-controls .orh-icon.next:before{content:"";position:absolute;top:3px;width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent}
 .player-controls .orh-icon.prev:after,.player-controls .orh-icon.next:after{content:"";position:absolute;top:3px;width:2px;height:12px;background:currentColor}
 .player-controls .orh-icon.prev:before{left:1px;border-right:9px solid currentColor}.player-controls .orh-icon.prev:after{left:11px}
 .player-controls .orh-icon.next:before{right:1px;border-left:9px solid currentColor}.player-controls .orh-icon.next:after{right:11px}
 .player-controls .orh-icon.repeat:before{content:"↻";position:absolute;inset:-3px 0 0;font-size:19px;line-height:20px;font-family:Arial,sans-serif}
-
-/* Main hero play button. */
-#listenBtn .play-icon{position:relative;display:inline-block;width:16px;height:16px;font-size:0;background:none!important}
+#listenBtn .play-icon{position:relative;display:inline-block;width:16px;height:16px;font-size:0;background:none!important;color:currentColor}
 #listenBtn .play-icon:before{content:"";position:absolute;left:4px;top:2px;width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:9px solid currentColor}
-
-/* Cards: replace literal ▶ with a controlled CSS icon. */
 .mini-play,.release-cover{font-size:0!important}
-.mini-play:before,.release-cover i:before{content:"";display:block;width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:9px solid #fff}
+.mini-play:before{content:"";display:block;width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:9px solid #fff}
 .mini-play{background:var(--radio-pink)!important;color:#fff!important}
 .release-cover i{position:absolute;right:14px;bottom:14px;width:42px;height:42px;border-radius:50%;background:var(--radio-pink)!important;display:grid;place-items:center;font-size:0;font-style:normal}
-.release-cover i:before{border-top-width:7px;border-bottom-width:7px;border-left-width:10px}
-
+.release-cover i:before{content:"";display:block;width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:10px solid #fff}
 .sticky>button{background:var(--radio-pink)!important;color:#fff!important}
-.sticky .play-shape{position:relative;width:18px;height:18px;margin:0;font-size:0;border:0!important}
+.sticky .play-shape{font-size:0;position:relative;width:18px;height:18px;margin:0;border:0!important}
 .sticky .play-shape:before{content:"";position:absolute;left:5px;top:2px;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:10px solid currentColor}
 .seek input,.volume input,.radio-progress,.radio-volume{accent-color:var(--radio-pink)!important}
 
-/* Mobile geometry: leave visible breathing room from both phone edges. */
+/* Theme-preview.css is loaded after the other styles, therefore these mobile rules use !important. */
 @media(max-width:900px){
- .container{width:calc(100% - 40px)!important;max-width:1240px}
- .player-bottom-v13{grid-template-columns:1fr!important;gap:14px!important}
+ .hero{padding-left:36px!important;padding-right:36px!important}
+ .overview-grid{padding-left:36px!important;padding-right:36px!important}
+ .promotion-hub,.section{padding-left:36px!important;padding-right:36px!important}
+ .artist-block,.mailing,.level-preview{margin-left:36px!important;margin-right:36px!important;padding-left:24px!important;padding-right:24px!important}
+ .player-bottom{display:grid!important;grid-template-columns:1fr!important;gap:14px!important}
  .radio-volume-wrap{width:68%!important;margin-left:auto!important;display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;gap:9px!important;align-items:center!important}
  .radio-volume-wrap .volume-label{font-size:10px!important;white-space:nowrap!important}
  .radio-volume{width:100%!important;height:5px!important}
 }
 @media(max-width:560px){
- .container{width:calc(100% - 40px)!important}
- .player{margin-left:0!important;margin-right:0!important}
+ .hero{padding-left:32px!important;padding-right:32px!important}
+ .overview-grid{padding-left:32px!important;padding-right:32px!important}
+ .promotion-hub,.section{padding-left:32px!important;padding-right:32px!important}
+ .artist-block,.mailing,.level-preview{margin-left:32px!important;margin-right:32px!important;padding-left:20px!important;padding-right:20px!important}
+ .player{padding-left:16px!important;padding-right:16px!important}
  .player-main{grid-template-columns:minmax(150px,46%) minmax(0,1fr)!important;gap:15px!important}
- .player-controls{padding-left:0!important;padding-right:0!important;justify-content:space-between!important}
+ .player-controls{display:flex!important;padding-left:0!important;padding-right:0!important;justify-content:space-between!important;align-items:center!important;gap:8px!important}
  .player-controls button{width:40px!important;height:40px!important;flex:0 0 40px!important}
  .player-controls .play{width:62px!important;height:62px!important;flex-basis:62px!important}
  .radio-volume-wrap{width:62%!important;margin-left:auto!important;grid-template-columns:auto minmax(0,1fr)!important;gap:8px!important}
@@ -53,13 +50,17 @@
  .radio-volume{height:4px!important}
 }
 @media(max-width:390px){
- .container{width:calc(100% - 36px)!important}
+ .hero{padding-left:24px!important;padding-right:24px!important}
+ .overview-grid{padding-left:24px!important;padding-right:24px!important}
+ .promotion-hub,.section{padding-left:24px!important;padding-right:24px!important}
+ .artist-block,.mailing,.level-preview{margin-left:24px!important;margin-right:24px!important}
  .player-main{grid-template-columns:minmax(136px,46%) minmax(0,1fr)!important;gap:12px!important}
  .player-controls .play{width:58px!important;height:58px!important;flex-basis:58px!important}
  .radio-volume-wrap{width:60%!important}
 }
 @media(max-width:360px){
- .container{width:calc(100% - 32px)!important}
+ .hero,.overview-grid,.promotion-hub,.section{padding-left:18px!important;padding-right:18px!important}
+ .artist-block,.mailing,.level-preview{margin-left:18px!important;margin-right:18px!important}
  .player-main{grid-template-columns:128px minmax(0,1fr)!important}
  .player-controls{gap:3px!important}
  .player-controls button{width:36px!important;height:36px!important;flex-basis:36px!important}
