@@ -17,9 +17,10 @@ function previewHome(response) {
       el.append('<link rel="stylesheet" href="/assets/homepage-polish-v2.css?v=1.0">', { html: true });
       el.append('<link rel="stylesheet" href="/assets/hero-player-v2.css?v=1.0">', { html: true });
       el.append('<link rel="stylesheet" href="/assets/content-premium-v2.css?v=1.0">', { html: true });
+      el.append('<link rel="stylesheet" href="/assets/footer-mailing-premium-v2.css?v=1.0">', { html: true });
       el.append('<link rel="stylesheet" href="/assets/player-final.css?v=1.0">', { html: true });
       el.append('<link rel="stylesheet" href="/assets/internal-pages-polish.css?v=1.0">', { html: true });
-      el.append('<script src="/assets/app.js?v=17" defer></script>', { html: true });
+      el.append('<script src="/assets/app.js?v=18" defer></script>', { html: true });
     }})
     .on('nav', { element(el) { if (el.getAttribute('class') === 'site-nav') el.setAttribute('id', 'siteNav'); }})
     .on('.site-nav a[href="#promotion-directions"]', { element(el) {
@@ -41,7 +42,7 @@ export default { async fetch(request, env) {
     return new Response(levelsResponse.body, { status: levelsResponse.status, statusText: levelsResponse.statusText, headers });
   }
   const response = await env.ASSETS.fetch(request); const headers = new Headers(response.headers); Object.entries(securityHeaders()).forEach(([key,value]) => headers.set(key,value));
-  if (url.pathname === '/' || url.pathname.startsWith('/embed/') || url.pathname.startsWith('/embed-code/') || url.pathname.startsWith('/assets/app.js') || url.pathname.startsWith('/assets/player-hotfix.css') || url.pathname.startsWith('/assets/mobile-fixes.css') || url.pathname.startsWith('/theme-preview.css') || url.pathname.startsWith('/assets/mobile-premium.css') || url.pathname.startsWith('/assets/mobile-rebuild.css') || url.pathname.startsWith('/assets/final-polish.css') || url.pathname.startsWith('/assets/web-polish.css') || url.pathname.startsWith('/assets/player-layout-v2.css') || url.pathname.startsWith('/assets/homepage-polish.css') || url.pathname.startsWith('/assets/homepage-polish-v2.css') || url.pathname.startsWith('/assets/hero-player-v2.css') || url.pathname.startsWith('/assets/content-premium-v2.css') || url.pathname.startsWith('/assets/player-final.css') || url.pathname.startsWith('/assets/internal-pages-polish.css')) headers.set('Cache-Control','no-store, max-age=0');
+  if (url.pathname === '/' || url.pathname.startsWith('/embed/') || url.pathname.startsWith('/embed-code/') || url.pathname.startsWith('/assets/app.js') || url.pathname.startsWith('/assets/player-hotfix.css') || url.pathname.startsWith('/assets/mobile-fixes.css') || url.pathname.startsWith('/theme-preview.css') || url.pathname.startsWith('/assets/mobile-premium.css') || url.pathname.startsWith('/assets/mobile-rebuild.css') || url.pathname.startsWith('/assets/final-polish.css') || url.pathname.startsWith('/assets/web-polish.css') || url.pathname.startsWith('/assets/player-layout-v2.css') || url.pathname.startsWith('/assets/homepage-polish.css') || url.pathname.startsWith('/assets/homepage-polish-v2.css') || url.pathname.startsWith('/assets/hero-player-v2.css') || url.pathname.startsWith('/assets/content-premium-v2.css') || url.pathname.startsWith('/assets/footer-mailing-premium-v2.css') || url.pathname.startsWith('/assets/player-final.css') || url.pathname.startsWith('/assets/internal-pages-polish.css')) headers.set('Cache-Control','no-store, max-age=0');
   const output = url.pathname === '/' ? previewHome(new Response(response.body, { status: response.status, statusText: response.statusText, headers })) : new Response(response.body, { status: response.status, statusText: response.statusText, headers });
   return output;
 }};
