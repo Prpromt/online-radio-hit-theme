@@ -11,7 +11,7 @@ function previewHome(response) {
   return new HTMLRewriter()
     .on('head', {
       element(el) {
-        el.append('<script src="/assets/app.js?v=2" defer></script>', { html: true });
+        el.append('<script src="/assets/app.js?v=3" defer></script>', { html: true });
       }
     })
     .transform(response);
@@ -20,32 +20,12 @@ function previewHome(response) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-
-    if (url.pathname === '/health') {
-      return new Response('ok', { headers: { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store', ...securityHeaders() } });
-    }
-
-    if (url.pathname === '/artist-levels' || url.pathname === '/artist-levels/') {
-      return new Response(artistLevelsHtml, {
-        status: 200,
-        headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store, max-age=0', ...securityHeaders() }
-      });
-    }
-
+    if (url.pathname === '/health') return new Response('ok', { headers: { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store', ...securityHeaders() } });
+    if (url.pathname === '/artist-levels' || url.pathname === '/artist-levels/') return new Response(artistLevelsHtml, { status: 200, headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store, max-age=0', ...securityHeaders() } });
     const response = await env.ASSETS.fetch(request);
     const headers = new Headers(response.headers);
     Object.entries(securityHeaders()).forEach(([key, value]) => headers.set(key, value));
-
-    if (url.pathname === '/') {
-      headers.set('Cache-Control', 'no-store, max-age=0');
-    }
-    if (url.pathname.startsWith('/assets/player-hotfix.css') || url.pathname.startsWith('/assets/mobile-fixes.css') || url.pathname.startsWith('/theme-preview.css')) {
-      headers.set('Cache-Control', 'no-store, max-age=0');
-    }
-    if (url.pathname.startsWith('/embed/') || url.pathname.startsWith('/embed-code/')) {
-      headers.set('Cache-Control', 'no-store, max-age=0');
-    }
-
+    if (url.pathname === '/' || url.pathname.startsWith('/embed/') || url.pathname.startsWith('/embed-code/') || url.pathname.startsWith('/assets/app.js') || url.pathname.startsWith('/assets/player-hotfix.css') || url.pathname.startsWith('/assets/mobile-fixes.css') || url.pathname.startsWith('/theme-preview.css')) headers.set('Cache-Control', 'no-store, max-age=0');
     const output = url.pathname === '/' ? previewHome(new Response(response.body, { status: response.status, statusText: response.statusText, headers })) : new Response(response.body, { status: response.status, statusText: response.statusText, headers });
     return output;
   }
