@@ -36,19 +36,20 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          SMOKE_QUERY="?orh_smoke=$(date +%s)"
           check_url() {
             local path="$1"
             local expected="$2"
-            echo "Checking ${PREVIEW_URL}${path}"
-            body=$(curl --fail --silent --show-error --location --max-time 20 "${PREVIEW_URL}${path}")
+            echo "Checking ${PREVIEW_URL}${path}${SMOKE_QUERY}"
+            body=$(curl --fail --silent --show-error --location --max-time 20 "${PREVIEW_URL}${path}${SMOKE_QUERY}")
             printf '%s' "$body" | grep -Fq "$expected"
           }
           check_header() {
             local path="$1"
             local header="$2"
             local expected="$3"
-            echo "Checking header ${header} on ${PREVIEW_URL}${path}"
-            headers=$(curl --fail --silent --show-error --location --max-time 20 -D - -o /dev/null "${PREVIEW_URL}${path}" | tr -d '\r')
+            echo "Checking header ${header} on ${PREVIEW_URL}${path}${SMOKE_QUERY}"
+            headers=$(curl --fail --silent --show-error --location --max-time 20 -D - -o /dev/null "${PREVIEW_URL}${path}${SMOKE_QUERY}" | tr -d '\r')
             if ! printf '%s\n' "$headers" | grep -Eiq "^${header}[[:space:]]*:[[:space:]]*${expected}[[:space:]]*$"; then
               echo "Expected header was not found. Received headers:"
               printf '%s\n' "$headers"
