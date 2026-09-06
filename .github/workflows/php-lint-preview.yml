@@ -1,0 +1,42 @@
+name: PHP Lint Preview
+
+on:
+  push:
+    branches:
+      - cloudflare-preview
+    paths:
+      - 'wordpress-theme/**/*.php'
+      - '.github/workflows/php-lint-preview.yml'
+  pull_request:
+    branches:
+      - cloudflare-preview
+    paths:
+      - 'wordpress-theme/**/*.php'
+      - '.github/workflows/php-lint-preview.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  php-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout preview branch
+        uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Lint PHP files
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=$(find wordpress-theme -type f -name '*.php' -print)
+          test -n "$files"
+          for file in $files; do
+            echo "Linting $file"
+            php -l "$file"
+          done
