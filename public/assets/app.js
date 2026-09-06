@@ -1,7 +1,7 @@
 (()=>{
 const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s),audio=$('#audio');if(!audio)return;
 const title=$('#currentTitle'),artist=$('#currentArtist'),ticker=$('#tickerTitle'),progress=$('#progress'),volume=$('#volume'),currentTime=$('#currentTime'),duration=$('#duration'),mainPlay=$('#mainPlay'),listenBtn=$('#listenBtn'),eq=$('#eq'),menuBtn=$('#menuBtn'),nav=$('.site-nav'),player=$('.player'),playerCover=$('.cover');
-const hasAudio=Boolean(audio.getAttribute('src'));let index=0,repeat=false;
+const hasAudio=Boolean(audio.getAttribute('src')&&audio.getAttribute('src').trim());let index=0,repeat=false;
 const songs=[['Ночной город','KARAT','/assets/covers/night-city.svg'],['Jumanji','KARAT & МЛАДШИЙ','/assets/covers/jumanji.svg'],['Ты такая славная','Вячеслав Калинин','/assets/covers/slavnaya.svg'],['Просто я ищу тебя','Новый артист','/assets/covers/iskayu.svg'],['Летуаль','PELIKUANA','/assets/covers/letual.svg'],['Когда расцветает сирень','Андрей Додонов','/assets/covers/siren.svg']];
 const fallback=['linear-gradient(145deg,#dfff18,#1a1c22 52%,#ff2875)','linear-gradient(145deg,#171b26,#314f73 48%,#ff2875)','linear-gradient(145deg,#f5f6f3,#b9c5d5 48%,#ff2875)','linear-gradient(145deg,#171b26,#49316e 48%,#ff2875)','linear-gradient(145deg,#fff0f7,#ff8bc4 48%,#171b26)','linear-gradient(145deg,#eaf2dc,#dfff18 48%,#ff2875)'];
 const fmt=s=>Number.isFinite(s)?Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0'):'0:00';
