@@ -11,7 +11,7 @@ function previewHome(response) {
       el.append('<link rel="stylesheet" href="/assets/mobile-premium.css?v=3">', { html: true });
       el.append('<link rel="stylesheet" href="/assets/mobile-rebuild.css?v=3">', { html: true });
       el.append('<link rel="stylesheet" href="/assets/final-polish.css?v=2">', { html: true });
-      el.append('<link rel="stylesheet" href="/assets/web-polish.css?v=1">', { html: true });
+      el.append('<link rel="stylesheet" href="/assets/web-polish.css?v=2">', { html: true });
       el.append('<script src="/assets/app.js?v=7" defer></script>', { html: true });
     }})
     .on('nav', { element(el) { if (el.getAttribute('class') === 'site-nav') el.setAttribute('id', 'siteNav'); }})
@@ -19,7 +19,7 @@ function previewHome(response) {
       el.setInnerContent('Возможности артистов'); el.setAttribute('href', '/artist-levels/'); el.setAttribute('class', 'artist-levels-nav');
     }})
     .on('.promotion-hub', { element(el) {
-      el.before('<section class="artist-opportunities-home"><div class="artist-opportunities-copy"><div class="eyebrow">ДЛЯ АРТИСТОВ</div><h2>Pro - от 2 до 5 песен.<br><em>Premium - от 6 песен.</em></h2><p>Уровень определяется количеством оплаченных к размещению песен: от двух до пяти песен - Pro, шесть и более - Premium. Одна песня относится к базовому уровню.</p></div><a class="artist-opportunities-cta" href="/artist-levels/"><span>Уровни 1–3</span><b>Возможности и цены <i>→</i></b></a></section>', { html: true });
+      el.before('<section class="artist-opportunities-home"><div class="artist-opportunities-copy"><div class="eyebrow">ДЛЯ АРТИСТОВ</div><h2>Pro — от 2 до 5 песен.<br><em>Premium — от шести песен.</em></h2><p>Уровень определяется количеством оплаченных к размещению песен: 2–5 песен — Pro, 6 и более — Premium. Одна песня — базовый уровень.</p></div><a class="artist-opportunities-cta" href="/artist-levels/"><span>Уровни 1–3</span><b>Возможности и цены <i>→</i></b></a></section>', { html: true });
     }})
     .on('audio', { element(el) { el.removeAttribute('src'); }})
     .transform(response);
