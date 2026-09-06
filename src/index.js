@@ -11,10 +11,10 @@ export default {
       });
     }
 
-    // Public artist levels page: keep the clean URL /artist-levels/
-    // while serving the static Cloudflare Preview document.
+    // Public artist levels page. Use a directory index asset so Cloudflare
+    // does not normalize /artist-levels.html back to /artist-levels/.
     if (url.pathname === '/artist-levels' || url.pathname === '/artist-levels/') {
-      const assetUrl = new URL('/artist-levels.html', request.url);
+      const assetUrl = new URL('/artist-levels/index.html', request.url);
       const assetRequest = new Request(assetUrl.toString(), request);
       const assetResponse = await env.ASSETS.fetch(assetRequest);
       const headers = new Headers(assetResponse.headers);
