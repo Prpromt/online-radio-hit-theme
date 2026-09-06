@@ -43,10 +43,21 @@ jobs:
             body=$(curl --fail --silent --show-error --location --max-time 20 "${PREVIEW_URL}${path}")
             printf '%s' "$body" | grep -Fq "$expected"
           }
+          check_header() {
+            local path="$1"
+            local header="$2"
+            local expected="$3"
+            echo "Checking header ${header} on ${PREVIEW_URL}${path}"
+            headers=$(curl --fail --silent --show-error --location --max-time 20 --head "${PREVIEW_URL}${path}")
+            printf '%s' "$headers" | grep -Fqi "${header}: ${expected}"
+          }
           check_url "/health" "ok"
           check_url "/" "ОНЛАЙН РАДИО ХИТ"
-          check_url "/embed/" "ВСТРАИВАЕМЫЙ ПЛЕЕР"
+          check_url "/embed/" "Онлайн Радио Хит"
           check_url "/embed-code/" "Код для вставки на сайт"
+          check_header "/" "X-Content-Type-Options" "nosniff"
+          check_header "/" "Referrer-Policy" "strict-origin-when-cross-origin"
+          check_header "/" "Content-Security-Policy" "default-src 'self'"
 
       - name: Deployment complete
         run: echo "Cloudflare preview deployment and smoke tests completed successfully."
