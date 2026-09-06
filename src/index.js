@@ -29,7 +29,7 @@ function previewHome(response) {
     })
     .on('.promotion-hub', {
       element(el) {
-        el.before('<section class="artist-opportunities-home"><div class="artist-opportunities-copy"><div class="eyebrow">ДЛЯ АРТИСТОВ</div><h2>Размещайте музыку.<br><em>Открывайте новые возможности.</em></h2><p>Количество песен на радио определяет уровень присутствия артиста. На странице уровней собраны возможности размещения, статистика и условия.</p></div><a class="artist-opportunities-cta" href="/artist-levels/"><span>Уровни 1–3</span><b>Возможности и цены <i>→</i></b></a></section>', { html: true });
+        el.before('<section class="artist-opportunities-home"><div class="artist-opportunities-copy"><div class="eyebrow">ДЛЯ АРТИСТОВ</div><h2>Pro и Premium доступны даже с одной песней.</h2><p>Количество песен не ограничивает платный уровень. Подключив Pro или Premium, артист получает возможности выбранного аккаунта для всех своих размещённых песен, включая участие в соответствующих чартах и расширенные функции.</p></div><a class="artist-opportunities-cta" href="/artist-levels/"><span>Уровни 1–3</span><b>Возможности и цены <i>→</i></b></a></section>', { html: true });
       }
     })
     .on('audio', {
