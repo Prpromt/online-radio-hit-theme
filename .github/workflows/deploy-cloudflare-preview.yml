@@ -14,6 +14,9 @@ on:
 permissions:
   contents: read
 
+env:
+  PREVIEW_URL: https://online-radio-hit-theme.musickinoproducer.workers.dev
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -29,5 +32,21 @@ jobs:
           wranglerVersion: '4'
           command: deploy --config wrangler.toml
 
+      - name: Smoke test Preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          check_url() {
+            local path="$1"
+            local expected="$2"
+            echo "Checking ${PREVIEW_URL}${path}"
+            body=$(curl --fail --silent --show-error --location --max-time 20 "${PREVIEW_URL}${path}")
+            printf '%s' "$body" | grep -Fq "$expected"
+          }
+          check_url "/health" "ok"
+          check_url "/" "ОНЛАЙН РАДИО ХИТ"
+          check_url "/embed/" "ВСТРАИВАЕМЫЙ ПЛЕЕР"
+          check_url "/embed-code/" "Код для вставки на сайт"
+
       - name: Deployment complete
-        run: echo "Cloudflare preview deployment completed successfully."
+        run: echo "Cloudflare preview deployment and smoke tests completed successfully."
