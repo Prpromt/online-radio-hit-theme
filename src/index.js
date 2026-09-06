@@ -11,14 +11,15 @@ function previewHome(response) {
       el.append('<link rel="stylesheet" href="/assets/mobile-premium.css?v=3">', { html: true });
       el.append('<link rel="stylesheet" href="/assets/mobile-rebuild.css?v=3">', { html: true });
       el.append('<link rel="stylesheet" href="/assets/final-polish.css?v=2">', { html: true });
-      el.append('<script src="/assets/app.js?v=6" defer></script>', { html: true });
+      el.append('<link rel="stylesheet" href="/assets/web-polish.css?v=1">', { html: true });
+      el.append('<script src="/assets/app.js?v=7" defer></script>', { html: true });
     }})
     .on('nav', { element(el) { if (el.getAttribute('class') === 'site-nav') el.setAttribute('id', 'siteNav'); }})
     .on('.site-nav a[href="#promotion-directions"]', { element(el) {
       el.setInnerContent('Возможности артистов'); el.setAttribute('href', '/artist-levels/'); el.setAttribute('class', 'artist-levels-nav');
     }})
     .on('.promotion-hub', { element(el) {
-      el.before('<section class="artist-opportunities-home"><div class="artist-opportunities-copy"><div class="eyebrow">ДЛЯ АРТИСТОВ</div><h2>Pro — от 2 до 5 песен. Premium — от 6.</h2><p>Уровень определяется количеством оплаченных к размещению песен: от двух до пяти песен — Pro, шесть и более — Premium. Одна песня относится к базовому уровню.</p></div><a class="artist-opportunities-cta" href="/artist-levels/"><span>Уровни 1–3</span><b>Возможности и цены <i>→</i></b></a></section>', { html: true });
+      el.before('<section class="artist-opportunities-home"><div class="artist-opportunities-copy"><div class="eyebrow">ДЛЯ АРТИСТОВ</div><h2>Pro - от 2 до 5 песен.<br><em>Premium - от 6 песен.</em></h2><p>Уровень определяется количеством оплаченных к размещению песен: от двух до пяти песен - Pro, шесть и более - Premium. Одна песня относится к базовому уровню.</p></div><a class="artist-opportunities-cta" href="/artist-levels/"><span>Уровни 1–3</span><b>Возможности и цены <i>→</i></b></a></section>', { html: true });
     }})
     .on('audio', { element(el) { el.removeAttribute('src'); }})
     .transform(response);
@@ -33,7 +34,7 @@ export default { async fetch(request, env) {
     return new Response(levelsResponse.body, { status: levelsResponse.status, statusText: levelsResponse.statusText, headers });
   }
   const response = await env.ASSETS.fetch(request); const headers = new Headers(response.headers); Object.entries(securityHeaders()).forEach(([key,value]) => headers.set(key,value));
-  if (url.pathname === '/' || url.pathname.startsWith('/embed/') || url.pathname.startsWith('/embed-code/') || url.pathname.startsWith('/assets/app.js') || url.pathname.startsWith('/assets/player-hotfix.css') || url.pathname.startsWith('/assets/mobile-fixes.css') || url.pathname.startsWith('/theme-preview.css') || url.pathname.startsWith('/assets/mobile-premium.css') || url.pathname.startsWith('/assets/mobile-rebuild.css') || url.pathname.startsWith('/assets/final-polish.css')) headers.set('Cache-Control','no-store, max-age=0');
+  if (url.pathname === '/' || url.pathname.startsWith('/embed/') || url.pathname.startsWith('/embed-code/') || url.pathname.startsWith('/assets/app.js') || url.pathname.startsWith('/assets/player-hotfix.css') || url.pathname.startsWith('/assets/mobile-fixes.css') || url.pathname.startsWith('/theme-preview.css') || url.pathname.startsWith('/assets/mobile-premium.css') || url.pathname.startsWith('/assets/mobile-rebuild.css') || url.pathname.startsWith('/assets/final-polish.css') || url.pathname.startsWith('/assets/web-polish.css')) headers.set('Cache-Control','no-store, max-age=0');
   const output = url.pathname === '/' ? previewHome(new Response(response.body, { status: response.status, statusText: response.statusText, headers })) : new Response(response.body, { status: response.status, statusText: response.statusText, headers });
   return output;
 }};
