@@ -1,10 +1,14 @@
 document.addEventListener('DOMContentLoaded',function(){
- const b=document.getElementById('orh_pick_audio'),f=document.getElementById('orh_audio_url');
+ const b=document.getElementById('orh_pick_audio'),f=document.getElementById('orh_audio_url'),idField=document.getElementById('orh_audio_id');
  if(!b||!f||typeof wp==='undefined'||!wp.media)return;
  b.addEventListener('click',function(e){
   e.preventDefault();
   const frame=wp.media({title:'Выберите аудиофайл',button:{text:'Использовать файл'},library:{type:'audio'},multiple:false});
-  frame.on('select',function(){const a=frame.state().get('selection').first().toJSON();f.value=a.url||'';});
+  frame.on('select',function(){
+   const a=frame.state().get('selection').first().toJSON();
+   f.value=a.url||'';
+   if(idField)idField.value=a.id||'';
+  });
   frame.open();
  });
 });
@@ -39,7 +43,6 @@ document.addEventListener('DOMContentLoaded',function(){
     var p=audio.play();
     if(p && typeof p.catch==='function'){
       p.catch(function(){
-        // Keep the latest song loaded. Start it on the first visitor gesture.
         var start=function(){
           audio.play().catch(function(){});
           document.removeEventListener('click',start);
