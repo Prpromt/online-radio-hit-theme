@@ -24,7 +24,7 @@
 <div class="eyebrow">КОД</div>
 <div class="codebox"><textarea id="code" readonly></textarea><button class="copy" id="copy">Скопировать код</button></div>
 <span class="status" id="status">Код готов к вставке.</span>
-<div class="preview"><div class="eyebrow">ПРЕДПРОСМОТР</div><iframe id="preview" title="Онлайн Радио Хит" loading="lazy" allow="autoplay" height="250"></iframe></div>
+<div class="preview"><div class="eyebrow">ПРЕДПРОСМОТР</div><iframe id="preview" title="Онлайн Радио Хит" loading="lazy" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" height="250"></iframe></div>
 <p class="note"><strong>Важно:</strong> на рабочем WordPress-сайте источник iframe должен быть HTTPS. Для VK и других площадок вставляйте полученный HTML-код, если площадка поддерживает iframe.</p>
 </main>
 </div>
@@ -32,7 +32,7 @@
 (()=>{
 const h=document.getElementById('height'),w=document.getElementById('width'),code=document.getElementById('code'),copy=document.getElementById('copy'),status=document.getElementById('status'),preview=document.getElementById('preview');
 function safeWidth(){let v=w.value.trim();if(/^\d{2,4}px$/.test(v)||/^\d{1,3}%$/.test(v))return v;if(/^\d{2,4}$/.test(v))return v+'px';return '100%'}
-function update(){const height=Number(h.value)||250,width=safeWidth();const src=new URL('/embed/',location.origin).href;const html='<iframe src="'+src+'" width="'+width+'" height="'+height+'" frameborder="0" allow="autoplay" title="Онлайн Радио Хит"></iframe>';code.value=html;preview.src=src;preview.height=height;preview.style.width=width==='100%'?'100%':width;status.textContent='Код готов к вставке.'}
+function update(){const height=Number(h.value)||250,width=safeWidth(),src=new URL('/embed/',location.origin).href;const html='<iframe src="'+src+'" width="'+width+'" height="'+height+'" frameborder="0" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" loading="lazy" title="Онлайн Радио Хит"></iframe>';code.value=html;preview.src=src;preview.height=height;preview.style.width=width==='100%'?'100%':width}
 h.addEventListener('change',update);w.addEventListener('input',update);copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(code.value);status.textContent='Код скопирован.'}catch(e){code.select();document.execCommand('copy');status.textContent='Код скопирован.'}});update();
 })();
 </script>
