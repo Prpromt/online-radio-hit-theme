@@ -1,6 +1,6 @@
 <?php
 if (!defined('ABSPATH')) exit;
-define('ORH_VERSION','46.0.0');
+define('ORH_VERSION','46.1.0');
 
 function orh_setup(){
  add_theme_support('title-tag'); add_theme_support('post-thumbnails');
@@ -34,7 +34,7 @@ add_action('after_switch_theme','orh_levels_flush');
 function orh_assets(){
  wp_enqueue_style('orh-style',get_stylesheet_uri(),[],ORH_VERSION);
  wp_enqueue_script('orh-app',get_template_directory_uri().'/assets/app.js',[],ORH_VERSION,true);
- wp_localize_script('orh-app','ORH',['ajax'=>admin_url('admin-ajax.php'),'nonce'=>wp_create_nonce('orh_player')]);
+ wp_localize_script('orh-app','ORH',['ajax'=>admin_url('admin-ajax.php'),'nonce'=>wp_create_nonce('orh_player'),'api'=>rest_url('orh/v1/radio')]);
 }
 add_action('wp_enqueue_scripts','orh_assets');
 
@@ -229,3 +229,32 @@ function orhseo_schema(){
  echo '<script type="application/ld+json">'.wp_json_encode(['@context'=>'https://schema.org','@graph'=>$graph],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES).'</script>';
 }
 add_action('wp_head','orhseo_schema',6);
+
+/* Radio API: the Preview keeps its local demo fallback, while WordPress exposes the real station state. */
+function orh_radio_api(){
+ register_rest_route('orh/v1','/radio',[
+  'methods'=>WP_REST_Server::READABLE,
+  'permission_callback'=>'__return_true',
+  'callback'=>function(){
+   $song=orh_current_song();
+   $stream=apply_filters('orh_radio_stream_url',get_option('orh_radio_stream_url',''));
+   $artist=$song&&$song['artist_id']?get_the_title($song['artist_id']):'';
+   $response=[
+    'station'=>'Онлайн Радио Хит',
+    'stream'=>esc_url_raw($stream),
+    'song'=>$song?[
+     'id'=>$song['id'],
+     'title'=>$song['title'],
+     'artist'=>$artist,
+     'audio'=>$song['audio'],
+     'cover'=>$song['cover']
+    ]:null,
+    'updated_at'=>current_time('mysql',true)
+   ];
+   $result=rest_ensure_response($response);
+   $result->header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0');
+   return $result;
+  }
+ ]);
+}
+add_action('rest_api_init','orh_radio_api');
