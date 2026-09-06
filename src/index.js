@@ -11,8 +11,8 @@ function previewHome(response) {
       el.append('<link rel="stylesheet" href="/assets/mobile-premium.css?v=3">', { html: true });
       el.append('<link rel="stylesheet" href="/assets/mobile-rebuild.css?v=3">', { html: true });
       el.append('<link rel="stylesheet" href="/assets/final-polish.css?v=2">', { html: true });
-      el.append('<link rel="stylesheet" href="/assets/web-polish.css?v=4">', { html: true });
-      el.append('<script src="/assets/app.js?v=7" defer></script>', { html: true });
+      el.append('<link rel="stylesheet" href="/assets/web-polish.css?v=5">', { html: true });
+      el.append('<script src="/assets/app.js?v=8" defer></script>', { html: true });
     }})
     .on('nav', { element(el) { if (el.getAttribute('class') === 'site-nav') el.setAttribute('id', 'siteNav'); }})
     .on('.site-nav a[href="#promotion-directions"]', { element(el) {
