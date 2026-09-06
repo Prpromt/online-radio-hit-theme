@@ -11,12 +11,17 @@ function previewHome(response) {
   return new HTMLRewriter()
     .on('head', {
       element(el) {
+        el.append('<link rel="stylesheet" href="/assets/mobile-premium.css?v=1">', { html: true });
         el.append('<script src="/assets/app.js?v=4" defer></script>', { html: true });
+      }
+    })
+    .on('nav', {
+      element(el) {
+        if (el.getAttribute('class') === 'site-nav') el.setAttribute('id', 'siteNav');
       }
     })
     .on('audio', {
       element(el) {
-        // The static preview must never pretend that a local demo stream is connected.
         el.removeAttribute('src');
       }
     })
@@ -31,7 +36,7 @@ export default {
     const response = await env.ASSETS.fetch(request);
     const headers = new Headers(response.headers);
     Object.entries(securityHeaders()).forEach(([key, value]) => headers.set(key, value));
-    if (url.pathname === '/' || url.pathname.startsWith('/embed/') || url.pathname.startsWith('/embed-code/') || url.pathname.startsWith('/assets/app.js') || url.pathname.startsWith('/assets/player-hotfix.css') || url.pathname.startsWith('/assets/mobile-fixes.css') || url.pathname.startsWith('/theme-preview.css')) headers.set('Cache-Control', 'no-store, max-age=0');
+    if (url.pathname === '/' || url.pathname.startsWith('/embed/') || url.pathname.startsWith('/embed-code/') || url.pathname.startsWith('/assets/app.js') || url.pathname.startsWith('/assets/player-hotfix.css') || url.pathname.startsWith('/assets/mobile-fixes.css') || url.pathname.startsWith('/theme-preview.css') || url.pathname.startsWith('/assets/mobile-premium.css')) headers.set('Cache-Control','no-store, max-age=0');
     const output = url.pathname === '/' ? previewHome(new Response(response.body, { status: response.status, statusText: response.statusText, headers })) : new Response(response.body, { status: response.status, statusText: response.statusText, headers });
     return output;
   }
