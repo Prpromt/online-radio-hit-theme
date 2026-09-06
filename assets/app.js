@@ -6,12 +6,12 @@ var activeAudio=null;
 var radioQueueIndex=0,radioRepeat=false;
 
 function player(){return document.getElementById('orh-stream')||document.getElementById('audio');}
-function controls(){return document.querySelectorAll('[data-play],#mainPlay,#listenBtn');}
+function controls(){return document.querySelectorAll('[data-play],#mainPlay,#listenBtn,.sticky>button');}
 function setPlayState(on){
   playing=!!on;
   controls().forEach(function(e){
     e.classList.toggle('is-playing',playing);
-    var icon=e.classList.contains('orh-icon')?e:e.querySelector('.orh-icon');
+    var icon=e.classList.contains('orh-icon')?e:e.querySelector('.orh-icon,.play-shape');
     if(icon){icon.classList.toggle('is-pause',playing);icon.classList.remove('pause');}
     e.setAttribute('aria-label',playing?'Пауза':'Воспроизвести');
   });
@@ -84,11 +84,12 @@ window.radioPrevious=function(){radioQueueIndex=findCurrentQueueIndex()-1;radioL
 window.radioNext=function(){radioQueueIndex=findCurrentQueueIndex()+1;radioLoadIndex(radioQueueIndex,true);};
 window.toggleRepeat=function(){radioRepeat=!radioRepeat;document.querySelectorAll('[data-repeat-toggle],[data-repeat],#repeatBtn').forEach(function(b){b.classList.toggle('is-active',radioRepeat);b.setAttribute('aria-pressed',radioRepeat?'true':'false');});var a=player();if(a)a.loop=radioRepeat;};
 function bindControls(){
-  var main=document.getElementById('mainPlay'),listen=document.getElementById('listenBtn'),prev=document.getElementById('prevBtn'),next=document.getElementById('nextBtn');
+  var main=document.getElementById('mainPlay'),listen=document.getElementById('listenBtn'),prev=document.getElementById('prevBtn'),next=document.getElementById('nextBtn'),sticky=document.querySelector('.sticky>button');
   if(main)main.addEventListener('click',function(){toggleRadio();});
   if(listen)listen.addEventListener('click',function(){toggleRadio();});
   if(prev)prev.addEventListener('click',function(){radioPrevious();});
   if(next)next.addEventListener('click',function(){radioNext();});
+  if(sticky)sticky.addEventListener('click',function(){toggleRadio();});
   document.querySelectorAll('[aria-label="Повтор"],#repeatBtn,[data-repeat],[data-repeat-toggle]').forEach(function(b){b.addEventListener('click',function(){toggleRepeat();});});
   document.querySelectorAll('[data-song]').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();var title=el.getAttribute('data-song')||'',artist=el.getAttribute('data-artist')||'',url=el.getAttribute('data-audio')||el.getAttribute('data-url')||'',cover=el.getAttribute('data-cover')||'';if(url)playSong('',title,artist,url,cover);else choose(title,artist,cover);});});
   var form=document.querySelector('form[data-mail],#mailForm');if(form)form.addEventListener('submit',subscribeForm);
