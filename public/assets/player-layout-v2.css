@@ -1,0 +1,15 @@
+/* V2 player layout: progress on top, transport controls below, volume on the right. */
+.player-v13 .player-bottom-v13{display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"seek seek" "controls volume";gap:14px 18px;align-items:center;border-top:1px solid #e7e9ed;padding-top:18px}
+.player-v13 .radio-seek-wrap{grid-area:seek;display:grid;gap:6px;min-width:0}
+.player-v13 .radio-time{display:flex;justify-content:space-between;align-items:center;font-size:9px;color:#858c97;font-variant-numeric:tabular-nums}
+.player-v13 .radio-progress{width:100%!important;height:6px;margin:0!important;appearance:none;-webkit-appearance:none;background:#e7e9ed;border-radius:99px;accent-color:#ff2875;cursor:pointer}
+.player-v13 .radio-progress::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#ff2875;border:3px solid #fff;box-shadow:0 0 0 1px #ff2875}
+.player-v13 .radio-progress::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:#ff2875;border:2px solid #fff;box-shadow:0 0 0 1px #ff2875}
+.player-v13 .player-controls{grid-area:controls;display:flex;align-items:center;gap:8px}
+.player-v13 .player-controls button{width:38px;height:38px;padding:0;border:1px solid transparent;border-radius:50%;background:#f6f7f8;display:grid;place-items:center;line-height:1}
+.player-v13 .player-controls button:hover{background:#fff;border-color:#dfe2e7}
+.player-v13 .player-controls .play{width:50px;height:50px;background:#dfff18;border-color:#cfdc00;box-shadow:0 7px 18px rgba(180,200,0,.2)}
+.player-v13 .radio-volume-wrap{grid-area:volume;display:flex;align-items:center;gap:8px;min-width:150px}
+.player-v13 .volume-label{font-size:9px;color:#858c97;white-space:nowrap}
+.player-v13 .radio-volume{width:105px;margin:0!important;accent-color:#ff2875;cursor:pointer}
+@media(max-width:700px){.player-v13 .player-bottom-v13{grid-template-columns:1fr;grid-template-areas:"seek" "controls" "volume";gap:12px}.player-v13 .player-controls{justify-content:center}.player-v13 .radio-volume-wrap{justify-content:flex-end}.player-v13 .radio-volume{flex:1;max-width:170px}}
