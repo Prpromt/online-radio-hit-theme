@@ -20,11 +20,14 @@ function previewHome(response) {
       el.append('<link rel="stylesheet" href="/assets/footer-mailing-premium-v2.css?v=1.0">', { html: true });
       el.append('<link rel="stylesheet" href="/assets/player-final.css?v=1.0">', { html: true });
       el.append('<link rel="stylesheet" href="/assets/internal-pages-polish.css?v=1.0">', { html: true });
-      el.append('<script src="/assets/app.js?v=18" defer></script>', { html: true });
+      el.append('<script src="/assets/app.js?v=19" defer></script>', { html: true });
     }})
     .on('nav', { element(el) { if (el.getAttribute('class') === 'site-nav') el.setAttribute('id', 'siteNav'); }})
     .on('.site-nav a[href="#promotion-directions"]', { element(el) {
       el.setInnerContent('Возможности артистов'); el.setAttribute('href', '/artist-levels/'); el.setAttribute('class', 'artist-levels-nav');
+    }})
+    .on('.header-button', { element(el) {
+      el.setInnerContent('Возможности артистов'); el.setAttribute('href', '/artist-levels/'); el.setAttribute('class', 'header-button artist-levels-nav');
     }})
     .on('audio', { element(el) { el.removeAttribute('src'); }})
     .transform(response);
