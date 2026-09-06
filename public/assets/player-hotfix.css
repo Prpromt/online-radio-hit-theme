@@ -1,4 +1,4 @@
-/* Online Radio Hit — player/mobile batch fix */
+/* Online Radio Hit — player/mobile/subscription batch fix */
 :root{--radio-pink:#ff4fa3;--radio-black:#111318;--radio-white:#fff}
 .player-controls button{font-size:0!important;background:#f4f5f3!important;color:var(--radio-black)!important}
 .player-controls .play{background:var(--radio-pink)!important;color:#fff!important;border:4px solid #fff!important;box-shadow:0 8px 24px rgba(255,79,163,.28)!important}
@@ -23,6 +23,13 @@
 .sticky .play-shape{font-size:0;position:relative;width:18px;height:18px;margin:0;border:0!important}
 .sticky .play-shape:before{content:"";position:absolute;left:5px;top:2px;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:10px solid currentColor}
 .seek input,.volume input,.radio-progress,.radio-volume{accent-color:var(--radio-pink)!important}
+
+/* Subscription Preview states. Backend persistence remains WordPress-only; all UI states are testable here. */
+.mailing form{position:relative}
+.mailing form input:focus{outline:2px solid rgba(255,40,117,.18);outline-offset:2px;border-color:var(--radio-pink)!important}
+.mailing form button:disabled{opacity:.65;cursor:wait;transform:none}
+.mailing form #mailMsg{display:block;min-height:18px;margin-top:12px;color:#68707c;font-size:11px;line-height:1.5}
+.mailing form #mailMsg.mail-success{color:#17834b;font-weight:800}
 
 /* Theme-preview.css is loaded after the other styles, therefore these mobile rules use !important. */
 @media(max-width:900px){
