@@ -56,13 +56,25 @@ jobs:
               return 1
             fi
           }
+          check_header_contains() {
+            local path="$1"
+            local header="$2"
+            local expected="$3"
+            echo "Checking header ${header} contains '${expected}' on ${PREVIEW_URL}${path}${SMOKE_QUERY}"
+            headers=$(curl --fail --silent --show-error --location --max-time 20 -D - -o /dev/null "${PREVIEW_URL}${path}${SMOKE_QUERY}" | tr -d '\r')
+            if ! printf '%s\n' "$headers" | grep -Eiq "^${header}[[:space:]]*:[[:space:]].*${expected}"; then
+              echo "Expected header directive was not found. Received headers:"
+              printf '%s\n' "$headers"
+              return 1
+            fi
+          }
           check_url "/health" "ok"
           check_url "/" "ОНЛАЙН РАДИО ХИТ"
           check_url "/embed/" "Онлайн Радио Хит"
           check_url "/embed-code/" "Код для вставки на сайт"
           check_header "/" "X-Content-Type-Options" "nosniff"
           check_header "/" "Referrer-Policy" "strict-origin-when-cross-origin"
-          check_header "/" "Content-Security-Policy" "default-src 'self'"
+          check_header_contains "/" "Content-Security-Policy" "default-src 'self'"
 
       - name: Deployment complete
         run: echo "Cloudflare preview deployment and smoke tests completed successfully."
