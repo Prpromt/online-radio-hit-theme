@@ -11,9 +11,9 @@ function previewHome(response) {
   return new HTMLRewriter()
     .on('head', {
       element(el) {
-        el.append('<link rel="stylesheet" href="/assets/mobile-premium.css?v=1">', { html: true });
-        el.append('<link rel="stylesheet" href="/assets/mobile-rebuild.css?v=1">', { html: true });
-        el.append('<script src="/assets/app.js?v=4" defer></script>', { html: true });
+        el.append('<link rel="stylesheet" href="/assets/mobile-premium.css?v=2">', { html: true });
+        el.append('<link rel="stylesheet" href="/assets/mobile-rebuild.css?v=2">', { html: true });
+        el.append('<script src="/assets/app.js?v=5" defer></script>', { html: true });
       }
     })
     .on('nav', {
