@@ -54,6 +54,23 @@ function orh_playlist_for_artist($artist_id){
   'orderby'=>'date','order'=>'DESC'
  ]);
 }
+
+/* Resolve a song's audio from either the stored URL or its WordPress Media Library attachment. */
+if(!function_exists('orh_song_audio')){
+ function orh_song_audio($song_id){
+  $song_id=absint($song_id);
+  if(!$song_id)return '';
+  $url=esc_url_raw(get_post_meta($song_id,'orh_audio_url',true));
+  if($url)return $url;
+  $attachment_id=absint(get_post_meta($song_id,'orh_audio_id',true));
+  if($attachment_id){
+   $attachment_url=wp_get_attachment_url($attachment_id);
+   if($attachment_url)return esc_url_raw($attachment_url);
+  }
+  return '';
+ }
+}
+
 function orh_current_song(){
  $q=new WP_Query([
   'post_type'=>'orh_song','posts_per_page'=>1,'post_status'=>'publish',
@@ -62,7 +79,7 @@ function orh_current_song(){
  if($q->have_posts()){ $q->the_post(); $id=get_the_ID(); $data=[
   'id'=>$id,'title'=>get_the_title($id),
   'artist_id'=>(int)get_post_meta($id,'orh_artist_id',true),
-  'audio'=>esc_url_raw(get_post_meta($id,'orh_audio_url',true)),
+  'audio'=>orh_song_audio($id),
   'cover'=>get_the_post_thumbnail_url($id,'large')
  ]; wp_reset_postdata(); return $data; }
  wp_reset_postdata(); return null;
@@ -138,8 +155,6 @@ function orh_service_groups(){
 function orh_services_for_group($term_id,$limit=3){
  return new WP_Query(['post_type'=>'orh_service','posts_per_page'=>$limit,'post_status'=>'publish','tax_query'=>[['taxonomy'=>'orh_service_group','field'=>'term_id','terms'=>$term_id]],'orderby'=>'date','order'=>'DESC']);
 }
-
-/* Admin dashboard */
 
 /* ORH SEO 9.2 — safe lightweight SEO fallback */
 if(!function_exists('orhseo_trim')){
