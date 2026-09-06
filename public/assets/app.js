@@ -15,28 +15,32 @@
   let index=0,repeat=false;
   const fmt=s=>Number.isFinite(s)?Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0'):'0:00';
   function artwork(i){if(!playerCover)return;playerCover.style.backgroundImage=`linear-gradient(145deg,rgba(255,255,255,.04),rgba(255,40,117,.08)),url("${songs[i][2]}"),${fallback[i]}`;playerCover.style.backgroundSize='cover';playerCover.style.backgroundPosition='center';}
-  function sync(){const playing=!audio.paused;mainPlay?.classList.toggle('is-playing',playing);listenBtn?.classList.toggle('is-playing',playing);eq?.classList.toggle('playing',playing);mainPlay?.setAttribute('aria-label',playing?'Пауза':'Воспроизвести');mainPlay?.querySelector('.orh-icon')?.classList.toggle('is-pause',playing);$$('[data-track]').forEach(el=>el.classList.toggle('is-playing',playing&&Number(el.dataset.track)===index));}
+  function sync(){const playing=!audio.paused;mainPlay?.classList.toggle('is-playing',playing);listenBtn?.classList.toggle('is-playing',playing);eq?.classList.toggle('playing',playing);mainPlay?.setAttribute('aria-label',playing?'Пауза':'Воспроизвести');mainPlay?.querySelector('.orh-icon')?.classList.toggle('is-pause',playing);}
   function setTrack(i,play=false){index=(i+songs.length)%songs.length;const[t,a]=songs[index];if(title)title.textContent=t;if(artist)artist.textContent=a;if(ticker)ticker.textContent=t;audio.currentTime=0;artwork(index);if(play)audio.play().catch(()=>{});sync();}
   function stop(e){e.preventDefault();e.stopImmediatePropagation();}
+  function toggle(){if(audio.paused)audio.play().catch(e=>console.warn('Воспроизведение недоступно:',e));else audio.pause();sync();}
   mainPlay?.addEventListener('click',e=>{stop(e);toggle()},true);
   listenBtn?.addEventListener('click',e=>{stop(e);toggle()},true);
   $('#prevBtn')?.addEventListener('click',e=>{stop(e);setTrack(index-1,true)},true);
   $('#nextBtn')?.addEventListener('click',e=>{stop(e);setTrack(index+1,true)},true);
   $$('[aria-label="Повтор"]').forEach(btn=>btn.addEventListener('click',e=>{stop(e);repeat=!repeat;btn.classList.toggle('active',repeat);btn.setAttribute('aria-pressed',String(repeat))},true));
-  $$('[data-track],[data-song]').forEach(btn=>btn.addEventListener('click',e=>{
-    stop(e);const found=Number.isInteger(Number(btn.dataset.track))?Number(btn.dataset.track):songs.findIndex(s=>s[0]===btn.dataset.song);
-    if(found>=0)setTrack(found,true);
-  },true));
+  $$('[data-track],[data-song]').forEach(btn=>btn.addEventListener('click',e=>{stop(e);const found=Number.isInteger(Number(btn.dataset.track))?Number(btn.dataset.track):songs.findIndex(s=>s[0]===btn.dataset.song);if(found>=0)setTrack(found,true)},true));
   audio.addEventListener('play',sync);audio.addEventListener('pause',sync);
   audio.addEventListener('loadedmetadata',()=>{if(duration)duration.textContent=fmt(audio.duration)});
   audio.addEventListener('timeupdate',()=>{if(currentTime)currentTime.textContent=fmt(audio.currentTime);if(duration)duration.textContent=fmt(audio.duration);if(progress&&audio.duration)progress.value=audio.currentTime/audio.duration*100});
   audio.addEventListener('ended',()=>repeat?audio.play().catch(()=>{}):setTrack(index+1,true));
   progress?.addEventListener('input',()=>{if(audio.duration)audio.currentTime=Number(progress.value)/100*audio.duration});
   volume?.addEventListener('input',()=>audio.volume=Number(volume.value));audio.volume=Number(volume?.value||.8);
-  function toggle(){if(audio.paused)audio.play().catch(e=>console.warn('Воспроизведение недоступно:',e));else audio.pause();sync();}
   menuBtn?.addEventListener('click',e=>{stop(e);const open=nav?.classList.toggle('is-open');menuBtn.setAttribute('aria-expanded',String(Boolean(open)))},true);
   nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('is-open');menuBtn?.setAttribute('aria-expanded','false')}));
-  $('#mailForm')?.addEventListener('submit',e=>{e.preventDefault();e.stopImmediatePropagation();const msg=$('#mailMsg');if(msg)msg.textContent='В Preview форма работает локально. В WordPress используется реальный обработчик подписки.'},true);
+  $('#mailForm')?.addEventListener('submit',e=>{
+    stop(e);
+    const form=e.currentTarget,msg=$('#mailMsg'),input=form.querySelector('input[type="email"]'),button=form.querySelector('button');
+    if(!input||!input.checkValidity()){input?.reportValidity();return;}
+    if(button){button.disabled=true;button.textContent='Подписываем…';}
+    if(msg){msg.className='mail-success';msg.textContent='Готово. В Preview подписка демонстрируется локально; после подключения WordPress адрес будет сохранён в единой рассылке.';}
+    setTimeout(()=>{form.reset();if(button){button.disabled=false;button.textContent='Подписаться';}},1800);
+  },true);
   if(player&&!$('#embedCodeBtn')){const box=document.createElement('div');box.className='embed-tools';box.innerHTML='<a id="embedCodeBtn" href="/embed-code/">Встроить плеер на сайт</a>';player.appendChild(box);}
   artwork(index);sync();
 })();
