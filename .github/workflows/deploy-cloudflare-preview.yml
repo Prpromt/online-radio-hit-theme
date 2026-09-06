@@ -48,7 +48,7 @@ jobs:
             local header="$2"
             local expected="$3"
             echo "Checking header ${header} on ${PREVIEW_URL}${path}"
-            headers=$(curl --fail --silent --show-error --location --max-time 20 --head "${PREVIEW_URL}${path}")
+            headers=$(curl --fail --silent --show-error --location --max-time 20 -D - -o /dev/null "${PREVIEW_URL}${path}")
             printf '%s' "$headers" | grep -Fqi "${header}: ${expected}"
           }
           check_url "/health" "ok"
