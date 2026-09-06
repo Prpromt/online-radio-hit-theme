@@ -12,6 +12,7 @@ function previewHome(response) {
     .on('head', {
       element(el) {
         el.append('<link rel="stylesheet" href="/assets/mobile-premium.css?v=1">', { html: true });
+        el.append('<link rel="stylesheet" href="/assets/mobile-rebuild.css?v=1">', { html: true });
         el.append('<script src="/assets/app.js?v=4" defer></script>', { html: true });
       }
     })
@@ -36,7 +37,7 @@ export default {
     const response = await env.ASSETS.fetch(request);
     const headers = new Headers(response.headers);
     Object.entries(securityHeaders()).forEach(([key, value]) => headers.set(key, value));
-    if (url.pathname === '/' || url.pathname.startsWith('/embed/') || url.pathname.startsWith('/embed-code/') || url.pathname.startsWith('/assets/app.js') || url.pathname.startsWith('/assets/player-hotfix.css') || url.pathname.startsWith('/assets/mobile-fixes.css') || url.pathname.startsWith('/theme-preview.css') || url.pathname.startsWith('/assets/mobile-premium.css')) headers.set('Cache-Control','no-store, max-age=0');
+    if (url.pathname === '/' || url.pathname.startsWith('/embed/') || url.pathname.startsWith('/embed-code/') || url.pathname.startsWith('/assets/app.js') || url.pathname.startsWith('/assets/player-hotfix.css') || url.pathname.startsWith('/assets/mobile-fixes.css') || url.pathname.startsWith('/theme-preview.css') || url.pathname.startsWith('/assets/mobile-premium.css') || url.pathname.startsWith('/assets/mobile-rebuild.css')) headers.set('Cache-Control','no-store, max-age=0');
     const output = url.pathname === '/' ? previewHome(new Response(response.body, { status: response.status, statusText: response.statusText, headers })) : new Response(response.body, { status: response.status, statusText: response.statusText, headers });
     return output;
   }
