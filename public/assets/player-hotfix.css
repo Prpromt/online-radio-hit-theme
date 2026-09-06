@@ -23,6 +23,9 @@
 .sticky>button{background:var(--radio-pink)!important;color:#fff!important}
 .sticky .play-shape{font-size:0;position:relative;width:18px;height:18px;margin:0;border:0!important}
 .sticky .play-shape:before{content:"";position:absolute;left:5px;top:2px;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:10px solid currentColor}
+.sticky .play-shape.is-pause:before,.sticky .play-shape.is-pause:after{content:"";position:absolute;top:2px;width:4px;height:14px;background:currentColor;border:0}
+.sticky .play-shape.is-pause:before{left:3px}.sticky .play-shape.is-pause:after{left:11px}
+.sticky .play-shape.is-pause{width:18px;height:18px}
 .seek input,.volume input,.radio-progress,.radio-volume{accent-color:var(--radio-pink)!important}
 .mailing form{position:relative}
 .mailing form input:focus{outline:2px solid rgba(255,40,117,.18);outline-offset:2px;border-color:var(--radio-pink)!important}
