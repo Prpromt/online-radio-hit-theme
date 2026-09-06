@@ -45,7 +45,7 @@ export default {
     const url = new URL(request.url);
     if (url.pathname === '/health') return new Response('ok', { headers: { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store', ...securityHeaders() } });
     if (url.pathname === '/artist-levels' || url.pathname === '/artist-levels/') {
-      const levelsResponse = await env.ASSETS.fetch(new Request(new URL('/artist-levels.html', request.url), request));
+      const levelsResponse = await env.ASSETS.fetch(new Request(new URL('/artist-levels-preview.html', request.url), { method: 'GET', headers: request.headers }));
       const headers = new Headers(levelsResponse.headers);
       Object.entries(securityHeaders()).forEach(([key, value]) => headers.set(key, value));
       headers.set('Cache-Control','no-store, max-age=0');
