@@ -20,7 +20,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   php-lint:
@@ -28,34 +28,11 @@ jobs:
     steps:
       - name: Checkout preview branch
         uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-
-      - name: Repair known PHP syntax regression
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path('wordpress-theme/functions.php')
-          s=p.read_text(encoding='utf-8')
-          bad="$canonical=is_front_page()?home_url('/'):(is_singular()||is_post_type_archive()||is_tax()||is_category()||is_tag()?get_permalink()?:home_url('/'));"
-          good="$canonical=''; if(is_front_page())$canonical=home_url('/'); elseif(is_singular()||is_post_type_archive()||is_tax()||is_category()||is_tag())$canonical=get_permalink()?:home_url('/'); else $canonical=home_url('/');"
-          if bad in s:
-              p.write_text(s.replace(bad,good,1),encoding='utf-8')
-          PY
-          if ! git diff --quiet -- wordpress-theme/functions.php; then
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add wordpress-theme/functions.php
-            git commit -m 'Fix PHP syntax regression in SEO canonical logic'
-            git push origin HEAD:cloudflare-preview
-          fi
 
       - name: Lint PHP files
         shell: bash
