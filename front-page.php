@@ -32,4 +32,12 @@ if (function_exists('orh_artist_public_ids')) {
 }
 
 $original = get_theme_file_path('front-page-original.php');
-if (file_exists($original)) include $original;
+if (file_exists($original)) {
+    ob_start();
+    include $original;
+    $html = ob_get_clean();
+
+    /* The homepage has one canonical artist CTA. Remove the old duplicate rail. */
+    $html = preg_replace('/\s*<section class="premium-service-rail-v24">.*?<\/section>\s*(?=<script>window\.ORH_QUEUE)/s', "\n", $html, 1);
+    echo $html;
+}
