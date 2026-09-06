@@ -11,10 +11,10 @@ export default {
       });
     }
 
-    // Public artist levels page. Use a directory index asset so Cloudflare
-    // does not normalize /artist-levels.html back to /artist-levels/.
+    // Public artist levels page. The extensionless internal asset avoids
+    // Cloudflare Assets HTML normalization/redirect loops.
     if (url.pathname === '/artist-levels' || url.pathname === '/artist-levels/') {
-      const assetUrl = new URL('/artist-levels/index.html', request.url);
+      const assetUrl = new URL('/artist-levels-preview', request.url);
       const assetRequest = new Request(assetUrl.toString(), request);
       const assetResponse = await env.ASSETS.fetch(assetRequest);
       const headers = new Headers(assetResponse.headers);
@@ -23,6 +23,7 @@ export default {
       headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
       headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
       headers.set('Content-Security-Policy', "default-src 'self'; img-src 'self' data:; media-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self' data:; object-src 'none'; base-uri 'none'; frame-ancestors *");
+      headers.set('Content-Type', 'text/html; charset=utf-8');
       return new Response(assetResponse.body, {
         status: assetResponse.status,
         statusText: assetResponse.statusText,
