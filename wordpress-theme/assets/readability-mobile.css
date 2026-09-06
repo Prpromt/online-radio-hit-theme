@@ -1,80 +1,45 @@
-/* ORH — mobile readability: secondary gray descriptions +2px */
-.promotion-preview-card p,
-.promotion-group p,
-.service-card-copy p,
-.news-overview-item small,
-.mini-track small,
-.mini-chart-row small,
-.artist-card p,
-.artist-description,
-.artist-profile-card p,
-.artist-track small,
-.service-single-body aside p,
-.quick-links small,
-.premium-rail-card small,
-.section-top > div > p,
-.promotion-preview .section-top p,
-.promotion-hub .section-top p,
-.mailing form > p,
-.ticker span,
-.facts small,
-.release-card p,
-.news-card p,
-.news-archive-head p,
-.artist-archive .lead,
-.artist-archive-head p,
-.service-archive .lead,
-.service-single-body article,
-.application > div > p,
-.subscription small,
-.form > small,
-.consent,
-.empty,
-.onair-strip small,
-.player-v13 .player-info p,
-.artist-contact,
-.artist-description p {
-  font-size:14px !important;
-  line-height:1.55 !important;
-}
+/* ORH — readability: secondary gray descriptions +2px from current theme values */
+.promotion-preview-card p{font-size:11px!important}
+.promotion-group p{font-size:13px!important}
+.service-card-copy p{font-size:13px!important}
+.news-overview-item small{font-size:10px!important}
+.mini-track small,.mini-chart-row small{font-size:10px!important}
+.artist-card p{font-size:14px!important}
+.artist-description{font-size:16px!important}
+.artist-profile-card p{font-size:12px!important}
+.artist-track small{font-size:10px!important}
+.service-single-body aside p{font-size:14px!important}
+.quick-links small{font-size:12px!important}
+.premium-rail-card small{font-size:11px!important}
+.section-top > div > p,.promotion-preview .section-top p,.promotion-hub .section-top p{font-size:16px!important}
+.mailing form > p{font-size:14px!important}
+.ticker span{font-size:12px!important}
+.facts small{font-size:11px!important}
+.release-card p{font-size:13px!important}
+.news-card p{font-size:13px!important}
+.news-archive-head p{font-size:16px!important}
+.artist-archive .lead,.artist-archive-head p{font-size:16px!important}
+.service-archive .lead{font-size:16px!important}
+.service-single-body article{font-size:16px!important}
+.application > div > p{font-size:14px!important}
+.subscription small{font-size:12px!important}
+.form > small{font-size:12px!important}
+.consent{font-size:12px!important}
+.empty{font-size:16px!important}
+.onair-strip small{font-size:12px!important}
+.player-v13 .player-info p{font-size:15px!important}
+.artist-contact{font-size:12px!important}
+.artist-description p{font-size:16px!important}
 
 @media(max-width:700px){
-  .promotion-preview-card p,
-  .promotion-group p,
-  .service-card-copy p,
-  .news-overview-item small,
-  .mini-track small,
-  .mini-chart-row small,
-  .artist-card p,
-  .artist-description,
-  .artist-profile-card p,
-  .artist-track small,
-  .service-single-body aside p,
-  .quick-links small,
-  .premium-rail-card small,
-  .section-top > div > p,
-  .promotion-preview .section-top p,
-  .promotion-hub .section-top p,
-  .mailing form > p,
-  .ticker span,
-  .facts small,
-  .release-card p,
-  .news-card p,
-  .news-archive-head p,
-  .artist-archive .lead,
-  .artist-archive-head p,
-  .service-archive .lead,
-  .service-single-body article,
-  .application > div > p,
-  .subscription small,
-  .form > small,
-  .consent,
-  .empty,
-  .onair-strip small,
-  .player-v13 .player-info p,
-  .artist-contact,
-  .artist-description p {
-    font-size:14px !important;
-    line-height:1.55 !important;
-  }
+  .promotion-preview-card p{font-size:11px!important}
+  .promotion-group p{font-size:13px!important}
+  .service-card-copy p{font-size:13px!important}
+  .artist-card p{font-size:14px!important}
+  .artist-description,.artist-description p{font-size:16px!important}
+  .artist-profile-card p{font-size:12px!important}
+  .service-single-body aside p{font-size:14px!important}
+  .section-top > div > p,.promotion-preview .section-top p,.promotion-hub .section-top p{font-size:16px!important}
+  .service-single-body article{font-size:16px!important}
+  .news-card p,.release-card p{font-size:13px!important}
 }
