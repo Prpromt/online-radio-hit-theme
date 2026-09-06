@@ -9,13 +9,25 @@ function orh_setup(){
 }
 add_action('after_setup_theme','orh_setup');
 
+/* Public artist-placement levels page: available on the preview without requiring manual WP page creation. */
+function orh_levels_route(){ add_rewrite_rule('^artist-levels/?$','index.php?orh_levels=1','top'); }
+add_action('init','orh_levels_route');
+function orh_levels_query_vars($vars){ $vars[]='orh_levels'; return $vars; }
+add_filter('query_vars','orh_levels_query_vars');
+function orh_levels_template($template){
+ if((int)get_query_var('orh_levels')===1){ $file=get_theme_file_path('page-radio-levels.php'); if(file_exists($file)) return $file; }
+ return $template;
+}
+add_filter('template_include','orh_levels_template',99);
+function orh_levels_title($title){ if((int)get_query_var('orh_levels')===1) return 'Возможности размещения на радио — Онлайн Радио Хит'; return $title; }
+add_filter('pre_get_document_title','orh_levels_title',20);
+
 function orh_assets(){
  wp_enqueue_style('orh-style',get_stylesheet_uri(),[],ORH_VERSION);
  wp_enqueue_script('orh-app',get_template_directory_uri().'/assets/app.js',[],ORH_VERSION,true);
  wp_localize_script('orh-app','ORH',['ajax'=>admin_url('admin-ajax.php'),'nonce'=>wp_create_nonce('orh_player')]);
 }
 add_action('wp_enqueue_scripts','orh_assets');
-
 
 function orh_count_play(){
  check_ajax_referer('orh_player','nonce');
@@ -25,7 +37,6 @@ function orh_count_play(){
  wp_send_json_success(['plays'=>$plays]);
 }
 add_action('wp_ajax_orh_count_play','orh_count_play'); add_action('wp_ajax_nopriv_orh_count_play','orh_count_play');
-
 
 function orh_playlist_for_artist($artist_id){
  return new WP_Query([
@@ -110,7 +121,6 @@ add_shortcode('orh_artist_application','orh_application_shortcode');
 function orh_add_subscriber($email){
  global $wpdb;$table=$wpdb->prefix.'orh_subscribers';$wpdb->replace($table,['email'=>sanitize_email($email),'source'=>'artist-application','consent'=>1,'status'=>'active','created_at'=>current_time('mysql')],['%s','%s','%d','%s','%s']);
 }
-
 
 function orh_service_groups(){
  $terms=get_terms(['taxonomy'=>'orh_service_group','hide_empty'=>true,'number'=>8]);
@@ -200,235 +210,7 @@ function orhseo_schema(){
   if(has_post_thumbnail())$item['image']=get_the_post_thumbnail_url(get_the_ID(),'large');
   $graph[]=$item;
  }
- if(is_singular('orh_service'))$graph[]=['@type'=>'Service','name'=>get_the_title(),'url'=>get_permalink(),'description'=>orhseo_desc(),'provider'=>['@type'=>'Organization','name'=>'Онлайн Радио Хит','url'=>$url]];
- echo '<script type="application/ld+json">'.wp_json_encode(['@context'=>'https://schema.org','@graph'=>$graph],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES).'</script>'."\n";
+ if(is_singular('orh_service'))$graph[]=['@type'=>'Service','name'=>get_the_title(),'url'=>get_permalink(),'description'=>orhseo_desc(),'provider'=>['@type'=>'Organization','name'=>'Онлайн Радио Хит']];
+ echo '<script type="application/ld+json">'.wp_json_encode(['@context'=>'https://schema.org','@graph'=>$graph],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES).'</script>';
 }
 add_action('wp_head','orhseo_schema',6);
-
-/* Per-page SEO fields */
-function orhseo_metaboxes(){
- foreach(['post','page','orh_song','orh_artist','orh_service'] as $type)add_meta_box('orhseo_box','SEO страницы','orhseo_box_html',$type,'normal','high');
-}
-add_action('add_meta_boxes','orhseo_metaboxes');
-function orhseo_box_html($post){
- wp_nonce_field('orhseo_save','orhseo_nonce');
- $t=get_post_meta($post->ID,'_orhseo_title',true);$d=get_post_meta($post->ID,'_orhseo_description',true);
- echo '<p><label><b>SEO Title</b><br><input class="large-text" name="_orhseo_title" value="'.esc_attr($t).'" placeholder="'.esc_attr(orhseo_title()).'"></label></p>';
- echo '<p><label><b>Meta Description</b><br><textarea class="large-text" rows="3" name="_orhseo_description" placeholder="'.esc_attr(orhseo_desc()).'">'.esc_textarea($d).'</textarea></label></p>';
-}
-function orhseo_save($id){
- if(!isset($_POST['orhseo_nonce'])||!wp_verify_nonce($_POST['orhseo_nonce'],'orhseo_save'))return;
- if(defined('DOING_AUTOSAVE')&&DOING_AUTOSAVE)return;
- if(!current_user_can('edit_post',$id))return;
- update_post_meta($id,'_orhseo_title',sanitize_text_field($_POST['_orhseo_title']??''));
- update_post_meta($id,'_orhseo_description',sanitize_textarea_field($_POST['_orhseo_description']??''));
-}
-add_action('save_post','orhseo_save');
-function orhseo_title_custom($parts){
- $id=get_queried_object_id();$custom=$id?get_post_meta($id,'_orhseo_title',true):'';
- if($custom&&!is_admin())$parts['title']=$custom;
- return $parts;
-}
-add_filter('document_title_parts','orhseo_title_custom',30);
-function orhseo_desc_custom(){
- if(is_admin())return;
- $id=get_queried_object_id();$custom=$id?get_post_meta($id,'_orhseo_description',true):'';
- if($custom&&!defined('WPSEO_VERSION')&&!defined('RANK_MATH_VERSION')&&!defined('AIOSEO_VERSION')){
-  echo '<meta name="description" content="'.esc_attr(orhseo_trim($custom)).'">'."\n";
- }
-}
-add_action('wp_head','orhseo_desc_custom',4);
-
-
-
-
-/* V37 — real media resolver: featured image -> ORH ID/URL -> matching JPG in Media Library. */
-if (!function_exists('orh_media_url')) {
-function orh_media_url($post_id, $size='large') {
-    $post_id=(int)$post_id;
-    if(!$post_id) return '';
-
-    $ids=[];
-    $thumb=(int)get_post_thumbnail_id($post_id);
-    if($thumb) $ids[]=$thumb;
-
-    $saved=(int)get_post_meta($post_id,'orh_image_id',true);
-    if($saved) $ids[]=$saved;
-
-    foreach(array_unique($ids) as $id){
-        $url=wp_get_attachment_image_url($id,$size);
-        if(!$url) $url=wp_get_attachment_url($id);
-        if($url) return esc_url_raw($url);
-    }
-
-    $saved_url=trim((string)get_post_meta($post_id,'orh_image_url',true));
-    if($saved_url && filter_var($saved_url,FILTER_VALIDATE_URL)) return esc_url_raw($saved_url);
-
-    /*
-     * Last real-data fallback: find a JPG in Media Library whose filename
-     * matches the post slug/title. This is intentionally restricted to JPG
-     * and to the same record's semantic name, never an arbitrary image.
-     */
-    $slug=sanitize_title(get_post_field('post_name',$post_id));
-    $title_slug=sanitize_title(get_the_title($post_id));
-    $needles=array_values(array_unique(array_filter([$slug,$title_slug])));
-    if($needles){
-        $atts=get_posts([
-            'post_type'=>'attachment',
-            'post_status'=>'inherit',
-            'post_mime_type'=>'image/jpeg',
-            'posts_per_page'=>100,
-            'orderby'=>'ID',
-            'order'=>'DESC',
-            'fields'=>'ids'
-        ]);
-        foreach($atts as $aid){
-            $file=get_attached_file($aid);
-            $name=$file?pathinfo($file,PATHINFO_FILENAME):'';
-            $aname=sanitize_title($name);
-            foreach($needles as $needle){
-                if($needle && ($aname===$needle || preg_match('/^'.preg_quote($needle,'/').'(-\d+)?$/',$aname))){
-                    $url=wp_get_attachment_image_url($aid,$size);
-                    if(!$url) $url=wp_get_attachment_url($aid);
-                    if($url) return esc_url_raw($url);
-                }
-            }
-        }
-    }
-
-    return '';
-}
-}
-
-if (!function_exists('orh_song_audio')) {
-function orh_song_audio($post_id) {
-    $url = trim((string)get_post_meta((int)$post_id, 'orh_audio_url', true));
-    if ($url && filter_var($url, FILTER_VALIDATE_URL)) return esc_url_raw($url);
-
-    $children = get_children([
-        'post_parent' => (int)$post_id,
-        'post_type' => 'attachment',
-        'post_status' => 'inherit',
-        'numberposts' => 30,
-        'orderby' => 'ID',
-        'order' => 'DESC',
-    ]);
-
-    foreach ($children as $attachment) {
-        if (strpos((string)$attachment->post_mime_type, 'audio/') === 0) {
-            $url = wp_get_attachment_url($attachment->ID);
-            if ($url) return esc_url_raw($url);
-        }
-    }
-    return '';
-}
-}
-
-
-/* V41 functional polish — no layout changes. */
-add_filter('style_loader_src', function($src,$handle){
-    if($handle==='orh-style') return add_query_arg('orh_v','113',$src);
-    return $src;
-},10,2);
-
-add_filter('script_loader_src', function($src,$handle){
-    if(strpos($handle,'orh')===0) return add_query_arg('orh_v','113',$src);
-    return $src;
-},10,2);
-
-add_filter('wp_get_attachment_image_attributes', function($attr){
-    if(empty($attr['loading'])) $attr['loading']='lazy';
-    return $attr;
-},10,1);
-
-
-/* V42 — reliable header menu fallback. Keeps the approved design and works even
-   when WordPress has no menu assigned to the Primary location. */
-if (!function_exists('orh_primary_menu_fallback')) {
-function orh_primary_menu_fallback(){
-    $items=[
-        ['Главная', home_url('/')],
-        ['Сейчас слушают', home_url('/#overview')],
-        ['Чарт', home_url('/#chart')],
-        ['Артисты', home_url('/#artists')],
-        ['Новости', home_url('/#news')],
-        ['Услуги', home_url('/#promotion')],
-    ];
-    echo '<ul class="menu">';
-    foreach($items as $item){
-        echo '<li class="menu-item"><a href="'.esc_url($item[1]).'">'.esc_html($item[0]).'</a></li>';
-    }
-    echo '</ul>';
-}
-}
-
-/* V48 — deterministic latest uploaded song. */
-if (!function_exists('orh_mark_audio_upload')) {
-function orh_mark_audio_upload($meta_id,$object_id,$meta_key,$meta_value){
-    if($meta_key !== 'orh_audio_url' || get_post_type($object_id) !== 'orh_song') return;
-    if(!$meta_value) return;
-    update_post_meta((int)$object_id,'orh_audio_uploaded_at',current_time('timestamp'));
-}
-}
-add_action('updated_post_meta','orh_mark_audio_upload',10,4);
-add_action('added_post_meta','orh_mark_audio_upload',10,4);
-
-if (!function_exists('orh_last_uploaded_song')) {
-function orh_last_uploaded_song(){
-    $ids=get_posts([
-        'post_type'=>'orh_song',
-        'post_status'=>'publish',
-        'posts_per_page'=>100,
-        'fields'=>'ids',
-        'orderby'=>'ID',
-        'order'=>'DESC',
-        'ignore_sticky_posts'=>true,
-    ]);
-    if(!$ids) return null;
-
-    $best=null; $best_ts=0;
-    foreach($ids as $id){
-        $audio=function_exists('orh_song_audio') ? orh_song_audio($id) : '';
-        if(!$audio) continue;
-        $ts=(int)get_post_meta($id,'orh_audio_uploaded_at',true);
-        if(!$ts) $ts=(int)get_post_field('post_modified_time',$id,true);
-        if(!$ts) $ts=(int)get_post_time('U',true,$id);
-        if($best===null || $ts>$best_ts){
-            $best=$id; $best_ts=$ts;
-        }
-    }
-    if(!$best){
-        $fallback=get_posts([
-            'post_type'=>'orh_song',
-            'post_status'=>'publish',
-            'posts_per_page'=>50,
-            'orderby'=>'date',
-            'order'=>'DESC',
-            'ignore_sticky_posts'=>true,
-        ]);
-        foreach($fallback as $candidate){
-            $candidate_audio=orh_song_audio($candidate->ID);
-            if($candidate_audio){
-                $best=(int)$candidate->ID;
-                break;
-            }
-        }
-    }
-    if(!$best) return null;
-
-    $audio=orh_song_audio($best);
-    $cover=function_exists('orh_media_url') ? orh_media_url($best,'large') : '';
-    $aid=(int)get_post_meta($best,'orh_artist_id',true);
-    $artist=(string)get_post_meta($best,'orh_artist_name',true);
-    if(!$artist && $aid) $artist=(string)get_the_title($aid);
-
-    return [
-        'id'=>(int)$best,
-        'title'=>get_the_title($best),
-        'artist'=>$artist,
-        'artist_id'=>$aid,
-        'audio'=>$audio,
-        'cover'=>$cover,
-    ];
-}
-}
