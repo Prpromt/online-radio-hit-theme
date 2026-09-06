@@ -1,0 +1,75 @@
+/* V17 — structural visual polish for the real WordPress theme */
+
+/* Header / WordPress menu: WordPress controls the menu items; the theme only styles them. */
+.site-header{min-height:78px;height:auto;padding:14px 4.5vw;gap:28px;align-items:center}
+.site-header .brand{flex:0 0 auto}
+.site-nav{min-width:0;display:flex;align-items:center;justify-content:center}
+.site-nav ul{align-items:center;flex-wrap:wrap;gap:6px 22px}
+.site-nav li{position:relative}
+.site-nav a{display:flex;align-items:center;min-height:38px;padding:8px 0}
+.site-nav .sub-menu{position:absolute;top:100%;left:0;min-width:220px;display:none;flex-direction:column;gap:0;padding:7px;background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow);z-index:200}
+.site-nav li:hover>.sub-menu,.site-nav li:focus-within>.sub-menu{display:flex}
+.site-nav .sub-menu li{width:100%}
+.site-nav .sub-menu a{width:100%;padding:10px 12px;border-radius:8px;white-space:nowrap}
+.site-nav .sub-menu a:hover{background:#f7f8fa;color:var(--pink)}
+.header-button{flex:0 0 auto;white-space:nowrap}
+.mobile-menu-toggle{flex:0 0 auto}
+
+/* Unified buttons: one geometry, no crooked text/icon alignment. */
+.primary,.secondary,.header-button,.more,.artist-card button,.artist-select>button,.mini-play,.release-cover,.artist-track button,.orh-levels-cta{transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease,background .16s ease}
+.primary,.secondary,.header-button{min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:9px;line-height:1}
+.primary:hover,.header-button:hover,.secondary:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(20,25,35,.10)}
+button{font-family:inherit}
+
+/* Main player: progress first, controls below, volume fixed to the right. */
+.player-v13 .player-bottom-v13{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"seek seek" "controls volume";gap:14px 18px;align-items:center;border-top:1px solid #e8eaed;padding-top:17px}
+.player-v13 .radio-seek-wrap{grid-area:seek;display:grid;grid-template-columns:1fr;gap:6px;min-width:0}
+.player-v13 .radio-time{display:flex;justify-content:space-between;align-items:center;color:#858c97;font-size:9px;font-variant-numeric:tabular-nums}
+.player-v13 .radio-progress{width:100%;height:6px;margin:0!important;appearance:none;-webkit-appearance:none;background:#e7e9ed;border-radius:99px;accent-color:var(--pink);cursor:pointer}
+.player-v13 .radio-progress::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--pink);border:3px solid #fff;box-shadow:0 0 0 1px var(--pink);cursor:pointer}
+.player-v13 .radio-progress::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--pink);border:2px solid #fff;box-shadow:0 0 0 1px var(--pink);cursor:pointer}
+.player-v13 .player-controls{grid-area:controls;display:flex;align-items:center;gap:8px}
+.player-v13 .player-controls button{width:38px;height:38px;display:grid;place-items:center;padding:0;border:1px solid transparent;border-radius:50%;background:#f7f8fa;color:#17191d}
+.player-v13 .player-controls button:hover{background:#fff;border-color:#dfe2e7;transform:translateY(-1px)}
+.player-v13 .player-controls .play{width:50px;height:50px;background:var(--acid);border-color:#cfdc00;box-shadow:0 7px 18px rgba(180,200,0,.20)}
+.player-v13 .player-controls .play:hover{background:#e8ff35}
+.player-v13 .radio-volume-wrap{grid-area:volume;display:flex;align-items:center;gap:8px;min-width:150px}
+.player-v13 .volume-label{font-size:9px;color:#858c97;white-space:nowrap}
+.player-v13 .radio-volume{width:105px;margin:0!important;accent-color:var(--pink);cursor:pointer}
+.player-v13 .player-bottom-v13 .orh-icon{display:block;width:16px;height:16px;position:relative}
+.player-v13 .player-bottom-v13 .play .orh-icon{width:18px;height:18px}
+
+/* Keep the player stable on narrow screens. */
+@media(max-width:700px){
+ .site-header{padding:12px 20px}
+ .site-header .brand{font-size:11px}
+ .header-button{display:none}
+ .player-v13 .player-bottom-v13{grid-template-columns:1fr;grid-template-areas:"seek" "controls" "volume";gap:12px}
+ .player-v13 .player-controls{justify-content:center}
+ .player-v13 .radio-volume-wrap{justify-content:flex-end}
+ .player-v13 .radio-volume{flex:1;max-width:150px}
+}
+@media(max-width:420px){
+ .player-v13{padding:15px!important;border-radius:20px!important}
+ .player-v13 .player-controls{gap:4px}
+ .player-v13 .player-controls button{width:34px;height:34px}
+ .player-v13 .player-controls .play{width:46px;height:46px}
+ .player-v13 .player-main{gap:16px}
+ .cover-v13{border-radius:15px}
+}
+
+/* Homepage artist CTA: a single clear block. The older duplicate promotional rail is removed in the template wrapper. */
+.artist-block{position:relative;overflow:hidden;margin-left:5vw;margin-right:5vw;padding:48px;grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr);gap:48px;border-radius:24px}
+.artist-block:before{content:"";position:absolute;right:-80px;top:-120px;width:300px;height:300px;border-radius:50%;background:var(--acid);opacity:.18;pointer-events:none}
+.artist-block>*{position:relative;z-index:1}
+.artist-block h2{max-width:680px}
+.artist-block .wide{min-height:48px;border-radius:12px}
+
+/* WordPress pages/posts: let editorial content breathe and keep the same system. */
+.entry-content,.page-content{max-width:1100px;margin:0 auto;padding:60px 5vw;line-height:1.75;color:#4f5661}
+.entry-content h1,.page-content h1{color:var(--ink);font-size:clamp(42px,6vw,72px);line-height:.96;letter-spacing:-.06em}
+.entry-content h2,.page-content h2{color:var(--ink);font-size:clamp(28px,4vw,46px);line-height:1;letter-spacing:-.04em}
+.entry-content a,.page-content a{color:var(--pink);font-weight:800}
+
+/* Remove visual duplication from legacy premium rail if it is still present in cached markup. */
+.premium-service-rail-v24{display:none!important}
