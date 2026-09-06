@@ -1,64 +1,44 @@
-/* Preview mobile polish batch — readable secondary text and stable player layout. */
+/* Preview mobile polish batch — readability, spacing and player controls. */
 body{overflow-x:hidden}
-.muted,.subtitle,.artist-name,.release-artist,.track-artist,.mailing p,.quick-links span,.feature-copy,.card-meta,.news-meta,small{color:#4f5662}
+.muted,.subtitle,.artist-name,.release-artist,.track-artist,.mailing p,.quick-links span,.feature-copy,.card-meta,.news-meta,small{color:#4a515d}
 @media (max-width:900px){
  .container{width:min(100% - 32px,1100px);margin-inline:auto}
- .hero-actions{gap:12px}
- .hero-actions a,.hero-actions button{min-height:58px}
+ .hero-actions{gap:12px}.hero-actions a,.hero-actions button{min-height:58px}
  .quick-links,.features,.benefits{gap:22px}
  .quick-links strong,.features strong,.benefits strong{font-size:20px;line-height:1.2}
- .quick-links span,.features span,.benefits span{display:block;margin-top:7px;font-size:16px;line-height:1.35;color:#4f5662}
- .player-main{grid-template-columns:150px minmax(0,1fr);min-width:0}
- .player-main>*{min-width:0}
- .player-cover{width:150px;height:150px;object-fit:cover}
- .player-info{min-width:0}
+ .quick-links span,.features span,.benefits span{display:block;margin-top:7px;font-size:17px;line-height:1.35;color:#4a515d}
+ .player-main{grid-template-columns:150px minmax(0,1fr);min-width:0}.player-main>*{min-width:0}
+ .player-cover{width:150px;height:150px;object-fit:cover}.player-info{min-width:0}
  .player-info h2,.player-info h3,.player-title{overflow-wrap:anywhere}
  .player-controls{display:grid;grid-template-columns:72px 72px minmax(82px,1fr) 72px;align-items:center;gap:12px}
- .player-controls button{min-width:0}
- .player-controls .play{width:76px;height:76px}
- .player-volume{display:flex;align-items:center;gap:12px;justify-content:flex-end}
- .player-volume input{min-width:90px}
+ .player-controls button{min-width:0}.player-controls .play{width:76px;height:76px}
+ .player-volume{display:flex;align-items:center;gap:12px;justify-content:flex-end}.player-volume input{min-width:90px}
 }
 @media (max-width:560px){
- .container{width:min(100% - 24px,1100px)}
- .hero-actions{grid-template-columns:1fr;display:grid}
- .hero-actions a,.hero-actions button{width:100%;box-sizing:border-box}
+ .container{width:calc(100% - 24px)}
+ .hero-actions{display:grid;grid-template-columns:1fr;gap:12px}.hero-actions a,.hero-actions button{width:100%;box-sizing:border-box}
  .release-row,.track-row,.artist-row,.news-row{grid-template-columns:28px 64px minmax(0,1fr) 44px;column-gap:10px;align-items:center}
  .release-row .cover,.track-row .cover,.artist-row .cover{width:64px;height:64px}
- .release-title,.track-title,.artist-title{font-size:18px;line-height:1.18}
- .release-artist,.track-artist,.artist-meta,.news-meta{font-size:15px;line-height:1.3;color:#4f5662;margin-top:5px}
+ .release-title,.track-title,.artist-title{font-size:19px;line-height:1.18}
+ .release-artist,.track-artist,.artist-meta,.news-meta{font-size:16px;line-height:1.3;color:#4a515d;margin-top:5px}
  .row-action{width:44px;height:44px}
- .player-card{padding:24px 20px}
- .player-main{grid-template-columns:1fr;gap:18px}
+ .player-card{padding:24px 20px}.player-main{grid-template-columns:1fr;gap:18px}
  .player-cover{width:min(100%,310px);height:auto;aspect-ratio:1/1;margin-inline:auto}
- .player-info{text-align:left}
- .player-info .eyebrow{font-size:13px;letter-spacing:.16em;color:#69717d}
- .player-info h2,.player-info h3,.player-title{font-size:34px;line-height:1.05;margin:7px 0 5px}
- .player-info .artist-name,.player-artist{font-size:20px;line-height:1.25;color:#4f5662}
- .player-progress{margin-top:18px}
- .player-time{font-size:15px;color:#4f5662}
- .player-volume{justify-content:stretch;margin-top:16px}
- .player-volume label{font-size:16px;color:#4f5662;white-space:nowrap}
- .player-volume input{flex:1;min-width:0}
- .player-controls{grid-template-columns:56px 56px minmax(72px,1fr) 56px;gap:10px;margin-top:20px}
- .player-controls .play{width:72px;height:72px;justify-self:center}
- .player-controls button{font-size:20px}
- .embed-link{font-size:17px;line-height:1.3;display:block;margin-top:14px}
- .section-head{gap:12px;align-items:flex-end}
- .section-head h2{font-size:34px;line-height:1.05}
- .section-head a{font-size:17px;white-space:nowrap}
- .mailing p,.feature-copy,.card-meta,.quick-links span{font-size:16px;line-height:1.4;color:#4f5662}
+ .player-info{text-align:left}.player-info .eyebrow{font-size:14px;letter-spacing:.15em;color:#555d69}
+ .player-info h2,.player-info h3,.player-title{font-size:34px;line-height:1.06;margin:7px 0 5px}
+ .player-info .artist-name,.player-artist{font-size:21px;line-height:1.25;color:#4a515d}
+ .player-progress{margin-top:18px}.player-time{font-size:16px;color:#4a515d}
+ .player-volume{justify-content:stretch;margin-top:16px}.player-volume label{font-size:17px;color:#4a515d;white-space:nowrap}
+ .player-volume input{flex:1;min-width:0}.player-controls{grid-template-columns:56px 56px minmax(72px,1fr) 56px;gap:10px;margin-top:20px}
+ .player-controls .play{width:72px;height:72px;justify-self:center}.player-controls button{font-size:20px}
+ .embed-link{font-size:18px;line-height:1.3;display:block;margin-top:14px}
+ .section-head{gap:12px;align-items:flex-end}.section-head h2{font-size:34px;line-height:1.05}.section-head a{font-size:18px;white-space:nowrap}
+ .mailing p,.feature-copy,.card-meta,.quick-links span{font-size:17px;line-height:1.4;color:#4a515d}
 }
 @media (max-width:390px){
- .container{width:calc(100% - 20px)}
- .release-row,.track-row,.artist-row,.news-row{grid-template-columns:24px 58px minmax(0,1fr) 40px;column-gap:8px}
- .release-row .cover,.track-row .cover,.artist-row .cover{width:58px;height:58px}
- .release-title,.track-title,.artist-title{font-size:17px}
- .release-artist,.track-artist,.artist-meta,.news-meta{font-size:14px}
- .player-card{padding:20px 16px}
- .player-info h2,.player-info h3,.player-title{font-size:30px}
- .player-info .artist-name,.player-artist{font-size:18px}
- .player-controls{grid-template-columns:50px 50px minmax(64px,1fr) 50px;gap:7px}
- .player-controls .play{width:66px;height:66px}
- .player-volume label{font-size:15px}
+ .container{width:calc(100% - 20px)}.release-row,.track-row,.artist-row,.news-row{grid-template-columns:24px 58px minmax(0,1fr) 40px;column-gap:8px}
+ .release-row .cover,.track-row .cover,.artist-row .cover{width:58px;height:58px}.release-title,.track-title,.artist-title{font-size:18px}
+ .release-artist,.track-artist,.artist-meta,.news-meta{font-size:15px}.player-card{padding:20px 16px}
+ .player-info h2,.player-info h3,.player-title{font-size:30px}.player-info .artist-name,.player-artist{font-size:19px}
+ .player-controls{grid-template-columns:50px 50px minmax(64px,1fr) 50px;gap:7px}.player-controls .play{width:66px;height:66px}.player-volume label{font-size:16px}
 }
