@@ -73,6 +73,8 @@ jobs:
           }
           check_url "/health" "ok"
           check_url "/" "ОНЛАЙН РАДИО ХИТ"
+          check_url "/" "Уровни артистов"
+          check_url "/artist-levels/" "Уровень 1"
           check_url "/embed/" "Онлайн Радио Хит"
           check_url "/embed-code/" "Код для вставки на сайт"
           check_header "/" "X-Content-Type-Options" "nosniff"
