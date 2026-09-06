@@ -20,6 +20,18 @@ function previewHome(response) {
         if (el.getAttribute('class') === 'site-nav') el.setAttribute('id', 'siteNav');
       }
     })
+    .on('.site-nav a[href="#promotion-directions"]', {
+      element(el) {
+        el.setInnerContent('Возможности артистов');
+        el.setAttribute('href', '/artist-levels/');
+        el.setAttribute('class', 'artist-levels-nav');
+      }
+    })
+    .on('.promotion-hub', {
+      element(el) {
+        el.before('<section class="artist-opportunities-home"><div class="artist-opportunities-copy"><div class="eyebrow">ДЛЯ АРТИСТОВ</div><h2>Размещайте музыку.<br><em>Открывайте новые возможности.</em></h2><p>Количество песен на радио определяет уровень присутствия артиста. На странице уровней собраны возможности размещения, статистика и условия.</p></div><a class="artist-opportunities-cta" href="/artist-levels/"><span>Уровни 1–3</span><b>Возможности и цены <i>→</i></b></a></section>', { html: true });
+      }
+    })
     .on('audio', {
       element(el) {
         el.removeAttribute('src');
