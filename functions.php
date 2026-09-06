@@ -80,7 +80,7 @@ function orh_current_song(){
   'id'=>$id,'title'=>get_the_title($id),
   'artist_id'=>(int)get_post_meta($id,'orh_artist_id',true),
   'audio'=>orh_song_audio($id),
-  'cover'=>get_the_post_thumbnail_url($id,'large')
+  'cover'=>get_post_thumbnail_url($id,'large')
  ]; wp_reset_postdata(); return $data; }
  wp_reset_postdata(); return null;
 }
@@ -89,6 +89,53 @@ function orh_artist_count($id){
  $q=new WP_Query(['post_type'=>'orh_song','posts_per_page'=>1,'fields'=>'ids','meta_key'=>'orh_artist_id','meta_value'=>(int)$id,'post_status'=>'publish']);
  return (int)$q->found_posts;
 }
+
+/* Central placement-level engine: one source of truth for all artist-facing templates. */
+if(!function_exists('orh_artist_level')){
+ function orh_artist_level($artist_id){
+  $count=orh_artist_count($artist_id);
+  if($count>=6)return 3;
+  if($count>=2)return 2;
+  return 1;
+ }
+ function orh_artist_level_range($level){
+  $level=(int)$level;
+  if($level===3)return '6+ песен';
+  if($level===2)return '2–5 песен';
+  return '1 песня';
+ }
+ function orh_artist_level_name($level){
+  $level=(int)$level;
+  if($level===3)return 'Уровень 3 · расширенный';
+  if($level===2)return 'Уровень 2 · первый платный';
+  return 'Уровень 1 · базовый';
+ }
+ function orh_artist_level_public($artist_id){ return orh_artist_count($artist_id)>=2; }
+ function orh_artist_public_ids(){
+  $artists=get_posts(['post_type'=>'orh_artist','post_status'=>'publish','numberposts'=>-1,'fields'=>'ids','orderby'=>'date','order'=>'DESC']);
+  $ids=[];
+  foreach($artists as $artist_id)if(orh_artist_level_public($artist_id))$ids[]=(int)$artist_id;
+  return $ids;
+ }
+}
+
+/* Level 1 has no public artist page: the public artist catalog starts with the paid Level 2. */
+function orh_artist_archive_levels($query){
+ if(is_admin()||!$query->is_main_query()||!$query->is_post_type_archive('orh_artist'))return;
+ $ids=orh_artist_public_ids();
+ $query->set('post__in',$ids?:[0]);
+}
+add_action('pre_get_posts','orh_artist_archive_levels',20);
+
+function orh_level_one_artist_redirect(){
+ if(is_admin()||!is_singular('orh_artist'))return;
+ $artist_id=get_queried_object_id();
+ if(!$artist_id||orh_artist_level_public($artist_id))return;
+ $songs=get_posts(['post_type'=>'orh_song','post_status'=>'publish','numberposts'=>1,'fields'=>'ids','meta_key'=>'orh_artist_id','meta_value'=>(int)$artist_id,'orderby'=>'date','order'=>'DESC']);
+ $target=$songs?get_permalink((int)$songs[0]):get_post_type_archive_link('orh_song');
+ if($target){wp_safe_redirect($target,301);exit;}
+}
+add_action('template_redirect','orh_level_one_artist_redirect',20);
 
 /* Simple central subscriber table. Later this can be moved to the shared mailing service. */
 function orh_install_tables(){
