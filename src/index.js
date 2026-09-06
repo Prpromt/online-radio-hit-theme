@@ -20,7 +20,7 @@ function previewHome(response) {
       el.append('<link rel="stylesheet" href="/assets/footer-mailing-premium-v2.css?v=1.0">', { html: true });
       el.append('<link rel="stylesheet" href="/assets/player-final.css?v=1.0">', { html: true });
       el.append('<link rel="stylesheet" href="/assets/internal-pages-polish.css?v=1.0">', { html: true });
-      el.append('<script src="/assets/app.js?v=20" defer></script>', { html: true });
+      el.append('<script src="/assets/app.js?v=21" defer></script>', { html: true });
     }})
     .on('nav', { element(el) { if (el.getAttribute('class') === 'site-nav') el.setAttribute('id', 'siteNav'); }})
     .on('.site-nav a[href="#promotion-directions"]', { element(el) {
