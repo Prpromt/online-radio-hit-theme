@@ -33,8 +33,8 @@ function getQueue(){
   if(Array.isArray(window.ORH_QUEUE)&&window.ORH_QUEUE.length)return window.ORH_QUEUE;
   var q=[];
   document.querySelectorAll('[data-song]').forEach(function(e){
-    var title=e.getAttribute('data-song')||'',artist=e.getAttribute('data-artist')||'';
-    if(title&&!q.some(function(x){return x.title===title&&x.artist===artist;}))q.push({id:'',title:title,artist:artist,url:'',cover:''});
+    var title=e.getAttribute('data-song')||'',artist=e.getAttribute('data-artist')||'',url=e.getAttribute('data-audio')||e.getAttribute('data-url')||'',cover=e.getAttribute('data-cover')||'';
+    if(title&&!q.some(function(x){return x.title===title&&x.artist===artist;}))q.push({id:e.getAttribute('data-id')||'',title:title,artist:artist,url:url,cover:cover});
   });
   return q;
 }
@@ -90,8 +90,8 @@ function bindControls(){
   if(prev)prev.addEventListener('click',function(){radioPrevious();});
   if(next)next.addEventListener('click',function(){radioNext();});
   if(sticky)sticky.addEventListener('click',function(){toggleRadio();});
-  document.querySelectorAll('[aria-label="Повтор"],#repeatBtn,[data-repeat],[data-repeat-toggle]').forEach(function(b){b.addEventListener('click',function(){toggleRepeat();});});
-  document.querySelectorAll('[data-song]').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();var title=el.getAttribute('data-song')||'',artist=el.getAttribute('data-artist')||'',url=el.getAttribute('data-audio')||el.getAttribute('data-url')||'',cover=el.getAttribute('data-cover')||'';if(url)playSong('',title,artist,url,cover);else choose(title,artist,cover);});});
+  /* Repeat controls already use inline handlers in the current WordPress markup. Do not add a second listener. */
+  document.querySelectorAll('[data-song]').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();var title=el.getAttribute('data-song')||'',artist=el.getAttribute('data-artist')||'',url=el.getAttribute('data-audio')||el.getAttribute('data-url')||'',cover=el.getAttribute('data-cover')||'';if(url)playSong(el.getAttribute('data-id')||'',title,artist,url,cover);else choose(title,artist,cover);});});
   var form=document.querySelector('form[data-mail],#mailForm');if(form)form.addEventListener('submit',subscribeForm);
 }
 function tryAutoplayRadio(){var a=player();if(!a)return false;activeAudio=a;var src=a.getAttribute('src')||a.currentSrc;if(!src)return false;a.autoplay=true;a.preload='auto';function audiblePlay(){if(!a.paused)return true;try{var p=a.play();if(p&&p.then)p.then(function(){setPlayState(true);showSticky(true);}).catch(function(){});return true;}catch(e){return false;}}if(a.readyState>=2&&!a._orhPlayPending)audiblePlay();else{a.addEventListener('canplay',audiblePlay,{once:true});a.addEventListener('loadeddata',audiblePlay,{once:true});}return true;}
