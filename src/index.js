@@ -11,7 +11,13 @@ function previewHome(response) {
   return new HTMLRewriter()
     .on('head', {
       element(el) {
-        el.append('<script src="/assets/app.js?v=3" defer></script>', { html: true });
+        el.append('<script src="/assets/app.js?v=4" defer></script>', { html: true });
+      }
+    })
+    .on('audio', {
+      element(el) {
+        // The static preview must never pretend that a local demo stream is connected.
+        el.removeAttribute('src');
       }
     })
     .transform(response);
