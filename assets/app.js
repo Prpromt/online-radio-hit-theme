@@ -7,7 +7,15 @@ var activeAudio=null;
 function player(){return document.getElementById('orh-stream');}
 function setPlayState(on){
   playing=!!on;
-  document.querySelectorAll('[data-play]').forEach(function(e){e.classList.toggle('is-playing',playing);var icon=e.classList.contains('orh-icon')?e:e.querySelector('.orh-icon');if(icon)icon.classList.toggle('pause',playing);});
+  document.querySelectorAll('[data-play]').forEach(function(e){
+    e.classList.toggle('is-playing',playing);
+    var icon=e.classList.contains('orh-icon')?e:e.querySelector('.orh-icon');
+    if(icon){
+      icon.classList.toggle('is-pause',playing);
+      icon.classList.remove('pause');
+    }
+    e.setAttribute('aria-label',playing?'Пауза':'Воспроизвести');
+  });
   var eq=document.querySelector('.equalizer');if(eq)eq.classList.toggle('is-playing',playing);
 }
 function setCover(url){if(!url)return;document.querySelectorAll('[data-current-cover],[data-sticky-cover]').forEach(function(box){var img=box.querySelector('img');if(!img){img=document.createElement('img');box.insertBefore(img,box.firstChild);}img.src=url;img.alt='Обложка текущего трека';img.loading='eager';img.style.width='100%';img.style.height='100%';img.style.objectFit='cover';img.style.objectPosition='center';img.style.display='block';box.classList.add('has-cover');box.querySelectorAll('span,small').forEach(function(e){e.style.display='none';});});}
@@ -15,7 +23,7 @@ function showSticky(force){var s=document.getElementById('stickyPlayer');if(!s)r
 function syncInitialPlayer(){var a=player();if(!a)return false;activeAudio=a;a.preload='auto';return !!(a.getAttribute('src')||a.currentSrc);}
 window.toggleRadio=function(){var a=player();if(!a)return;activeAudio=a;var src=a.getAttribute('src')||a.currentSrc;if(!src)return;if(a._orhPlayPending)return;if(!a.paused){a.pause();setPlayState(false);return;}a._orhPlayPending=true;try{if(a.readyState===0)a.load();}catch(e){}var p;try{p=a.play();}catch(e){a._orhPlayPending=false;setPlayState(false);return;}if(p&&p.then)p.then(function(){a._orhPlayPending=false;setPlayState(true);showSticky(true);}).catch(function(){a._orhPlayPending=false;setPlayState(false);showSticky(true);});else{a._orhPlayPending=false;setPlayState(true);showSticky(true);}};
 window.toggleActiveAudio=window.toggleRadio;
-window.choose=function(title,artist,cover){try{sessionStorage.setItem('orh_last_ui_track',JSON.stringify({title:title||'',artist:artist||'',cover:cover||''}));}catch(e){}document.querySelectorAll('[data-current-song],[data-sticky-song]').forEach(function(e){e.textContent=title||'';});document.querySelectorAll('[data-current-artist],[data-sticky-artist]').forEach(function(e){e.textContent=artist||'';});if(cover)setCover(cover);window.scrollTo({top:0,behavior:'smooth'});};
+window.choose=function(title,artist,cover){try{sessionStorage.setItem('orh_last_ui_track',JSON.stringify({title:title||'',artist:artist||'',cover:cover||''}));}catch(e){}document.querySelectorAll('[data-current-song],[data-sticky-song]').forEach(function(e){e.textContent=title||'';});document.querySelectorAll('[data-current-artist],[data-sticky-artist]').forEach(function(e){e.textContent=artist||'';});if(cover)setCover(cover);};
 window.playSong=function(id,title,artist,url,cover){window.choose(title,artist,cover);if(!url)return;var a=player();if(!a){a=document.createElement('audio');a.id='orh-stream';a.preload='auto';document.body.appendChild(a);}a.src=url;a.preload='auto';activeAudio=a;var vol=document.querySelector('[data-volume]');if(vol){a.volume=Number(vol.value);a.muted=(a.volume===0);}try{a.load();}catch(e){}var p=a.play();if(p&&p.then)p.then(function(){setPlayState(true);showSticky(true);countPlay(id);}).catch(function(){setPlayState(false);});};
 function countPlay(id){if(!window.ORH)return;fetch(ORH.ajax,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({action:'orh_count_play',nonce:ORH.nonce,song_id:id})}).catch(function(){});}
 window.openArtists=function(){var x=document.getElementById('artistsMenu');if(x)x.classList.toggle('open');};
