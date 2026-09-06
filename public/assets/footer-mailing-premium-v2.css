@@ -1,0 +1,19 @@
+/* Онлайн Радио Хит — final mailing/footer premium layer v2 */
+.mailing{position:relative;isolation:isolate;overflow:hidden;border:1px solid #e1e6d8!important;border-radius:26px!important;background:linear-gradient(135deg,#fff 0%,#f7f9e9 58%,#fff 100%)!important;box-shadow:0 18px 48px rgba(25,30,25,.06)!important}
+.mailing:before{content:"";position:absolute;left:-90px;bottom:-130px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(223,255,24,.3),transparent 68%);pointer-events:none}
+.mailing:after{content:"";position:absolute;right:-100px;top:-120px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(255,40,117,.13),transparent 68%);pointer-events:none}
+.mailing>*{position:relative;z-index:1}
+.mailing h2{letter-spacing:-.045em!important;line-height:1.02!important}
+.mailing .mailing-kicker{display:inline-flex;align-items:center;min-height:28px;padding:0 10px;border-radius:999px;background:var(--acid);color:#111216;font-size:9px;font-weight:950;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.mailing input{border:1px solid #d8ded2!important;background:#fff!important;box-shadow:0 6px 18px rgba(25,30,25,.04)!important;transition:border-color .2s ease,box-shadow .2s ease}
+.mailing input:focus{border-color:var(--acid)!important;box-shadow:0 0 0 4px rgba(223,255,24,.16),0 8px 22px rgba(25,30,25,.06)!important;outline:none}
+.mailing form button{border:0!important;background:var(--pink)!important;color:#fff!important;box-shadow:0 10px 24px rgba(255,40,117,.2)!important;transition:transform .2s ease,box-shadow .2s ease}
+.mailing form button:hover{transform:translateY(-1px);box-shadow:0 14px 28px rgba(255,40,117,.25)!important}
+.mailing form button:focus-visible{outline:3px solid rgba(223,255,24,.85);outline-offset:3px}
+.mail-consent a{color:#17191d!important;text-decoration-color:var(--acid)!important;text-underline-offset:3px}
+footer{position:relative;overflow:hidden}
+footer:before{content:"";position:absolute;left:50%;top:0;width:180px;height:3px;transform:translateX(-50%);background:linear-gradient(90deg,var(--pink),var(--acid));border-radius:0 0 5px 5px}
+footer .brand-mark{box-shadow:0 6px 18px rgba(223,255,24,.18)}
+footer .footer-docs a{transition:color .18s ease,transform .18s ease}
+footer .footer-docs a:hover{transform:translateY(-1px)}
+@media(max-width:700px){.mailing{border-radius:20px!important}.mailing .mailing-kicker{font-size:8px}.mailing h2{font-size:30px!important}}
