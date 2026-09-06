@@ -9,6 +9,9 @@ on:
       - 'src/**'
       - 'wrangler.toml'
       - '.github/workflows/deploy-cloudflare-preview.yml'
+      - 'wordpress-theme/**'
+      - '*.php'
+      - 'theme/**'
   workflow_dispatch:
 
 permissions:
