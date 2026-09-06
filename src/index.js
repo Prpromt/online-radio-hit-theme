@@ -18,7 +18,7 @@ function previewHome(response) {
       el.setInnerContent('Возможности артистов'); el.setAttribute('href', '/artist-levels/'); el.setAttribute('class', 'artist-levels-nav');
     }})
     .on('.promotion-hub', { element(el) {
-      el.before('<section class="artist-opportunities-home"><div class="artist-opportunities-copy"><div class="eyebrow">ДЛЯ АРТИСТОВ</div><h2>Pro и Premium доступны даже с одной песней.</h2><p>Количество песен не ограничивает платный уровень. Подключив Pro или Premium, артист получает возможности выбранного аккаунта для всех своих размещённых песен, включая участие в соответствующих чартах и расширенные функции.</p></div><a class="artist-opportunities-cta" href="/artist-levels/"><span>Уровни 1–3</span><b>Возможности и цены <i>→</i></b></a></section>', { html: true });
+      el.before('<section class="artist-opportunities-home"><div class="artist-opportunities-copy"><div class="eyebrow">ДЛЯ АРТИСТОВ</div><h2>Pro — от 2 до 5 песен. Premium — от 6.</h2><p>Уровень определяется количеством оплаченных к размещению песен: от двух до пяти песен — Pro, шесть и более — Premium. Одна песня относится к базовому уровню.</p></div><a class="artist-opportunities-cta" href="/artist-levels/"><span>Уровни 1–3</span><b>Возможности и цены <i>→</i></b></a></section>', { html: true });
     }})
     .on('audio', { element(el) { el.removeAttribute('src'); }})
     .transform(response);
