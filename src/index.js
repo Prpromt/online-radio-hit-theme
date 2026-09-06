@@ -33,6 +33,13 @@ function previewHome(response) {
     .transform(response);
 }
 
+function previewLevels(response) {
+  return new HTMLRewriter()
+    .on('.level-cta', { element(el) { el.setAttribute('href', '/artist-apply/'); }})
+    .on('.bottom-cta a', { element(el) { el.setAttribute('href', '/artist-apply/'); }})
+    .transform(response);
+}
+
 export default { async fetch(request, env) {
   const url = new URL(request.url);
   if (url.pathname === '/health') {
@@ -42,7 +49,7 @@ export default { async fetch(request, env) {
   if (url.pathname === '/artist-levels' || url.pathname === '/artist-levels/') {
     const levelsResponse = await env.ASSETS.fetch(new Request(new URL('/artist-levels-preview.html', request.url), { method: 'GET', headers: request.headers }));
     const headers = new Headers(levelsResponse.headers); Object.entries(securityHeaders()).forEach(([key,value]) => headers.set(key,value)); headers.set('Cache-Control','no-store', 'max-age=0');
-    return new Response(levelsResponse.body, { status: levelsResponse.status, statusText: levelsResponse.statusText, headers });
+    return previewLevels(new Response(levelsResponse.body, { status: levelsResponse.status, statusText: levelsResponse.statusText, headers }));
   }
   if (url.pathname === '/artist-apply' || url.pathname === '/artist-apply/') {
     const applyResponse = await env.ASSETS.fetch(new Request(new URL('/artist-apply-preview.html', request.url), { method: 'GET', headers: request.headers }));
