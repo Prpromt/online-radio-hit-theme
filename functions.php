@@ -15,12 +15,21 @@ add_action('init','orh_levels_route');
 function orh_levels_query_vars($vars){ $vars[]='orh_levels'; return $vars; }
 add_filter('query_vars','orh_levels_query_vars');
 function orh_levels_template($template){
- if((int)get_query_var('orh_levels')===1){ $file=get_theme_file_path('page-radio-levels.php'); if(file_exists($file)) return $file; }
+ if((int)get_query_var('orh_levels')===1){
+  global $wp_query;
+  $wp_query->is_404=false;
+  $wp_query->is_page=true;
+  status_header(200);
+  $file=get_theme_file_path('page-radio-levels.php');
+  if(file_exists($file)) return $file;
+ }
  return $template;
 }
 add_filter('template_include','orh_levels_template',99);
 function orh_levels_title($title){ if((int)get_query_var('orh_levels')===1) return 'Возможности размещения на радио — Онлайн Радио Хит'; return $title; }
 add_filter('pre_get_document_title','orh_levels_title',20);
+function orh_levels_flush(){ flush_rewrite_rules(); }
+add_action('after_switch_theme','orh_levels_flush');
 
 function orh_assets(){
  wp_enqueue_style('orh-style',get_stylesheet_uri(),[],ORH_VERSION);
@@ -132,7 +141,7 @@ function orh_services_for_group($term_id,$limit=3){
 
 /* Admin dashboard */
 
-/* ORH SEO 9.1 — safe lightweight SEO fallback */
+/* ORH SEO 9.2 — safe lightweight SEO fallback */
 if(!function_exists('orhseo_trim')){
 function orhseo_trim($text,$max=155){
  $text=wp_strip_all_tags(wp_specialchars_decode((string)$text));
@@ -143,6 +152,7 @@ function orhseo_trim($text,$max=155){
 }}
 function orhseo_title(){
  $site=get_bloginfo('name');
+ if((int)get_query_var('orh_levels')===1)return 'Возможности размещения на радио — Онлайн Радио Хит';
  if(is_singular('orh_song'))return get_the_title().' — слушать онлайн | '.$site;
  if(is_singular('orh_artist'))return get_the_title().' — песни и артист | '.$site;
  if(is_singular('orh_service'))return get_the_title().' — продвижение музыки | '.$site;
@@ -154,6 +164,7 @@ function orhseo_title(){
  return $site.' — онлайн радио и музыка';
 }
 function orhseo_desc(){
+ if((int)get_query_var('orh_levels')===1)return 'Уровни размещения на Онлайн Радио Хит: возможности артиста при размещении 1, 2–5 и 6+ песен, условия, статистика и развитие присутствия на радио.';
  if(is_singular('orh_song')){
   $aid=(int)get_post_meta(get_the_ID(),'orh_artist_id',true);
   $artist=$aid?get_the_title($aid):'артист';
@@ -178,7 +189,8 @@ add_filter('document_title_parts','orhseo_title_filter',20);
 function orhseo_head(){
  if(defined('WPSEO_VERSION')||defined('RANK_MATH_VERSION')||defined('AIOSEO_VERSION'))return;
  $title=orhseo_title();$desc=orhseo_desc();$canonical='';
- if(is_front_page())$canonical=home_url('/');
+ if((int)get_query_var('orh_levels')===1)$canonical=home_url('/artist-levels/');
+ elseif(is_front_page())$canonical=home_url('/');
  elseif(is_singular()||is_post_type_archive()||is_tax()||is_category()||is_tag())$canonical=get_permalink()?:home_url('/');
  else $canonical=home_url('/');
  $image='';
@@ -201,8 +213,11 @@ add_action('wp_head','orhseo_head',5);
 
 function orhseo_schema(){
  if(is_admin()||defined('WPSEO_VERSION')||defined('RANK_MATH_VERSION')||defined('AIOSEO_VERSION'))return;
- $url=home_url('/');$graph=[['@type'=>'WebSite','url'=>$url,'name'=>get_bloginfo('name'),'description'=>orhseo_desc()]];
+ $is_levels=(int)get_query_var('orh_levels')===1;
+ $url=$is_levels?home_url('/artist-levels/'):home_url('/');
+ $graph=[['@type'=>'WebSite','url'=>$url,'name'=>get_bloginfo('name'),'description'=>orhseo_desc()]];
  if(is_front_page())$graph[]=['@type'=>'RadioStation','name'=>'Онлайн Радио Хит','url'=>$url,'description'=>'Онлайн Радио Хит — популярные песни, новые артисты и музыка 24/7.'];
+ if($is_levels)$graph[]=['@type'=>'WebPage','name'=>'Возможности размещения на радио — Онлайн Радио Хит','url'=>$url,'description'=>orhseo_desc(),'isPartOf'=>['@type'=>'WebSite','url'=>home_url('/')]];
  if(is_singular('orh_song')){
   $item=['@type'=>'MusicRecording','name'=>get_the_title(),'url'=>get_permalink()];
   $aid=(int)get_post_meta(get_the_ID(),'orh_artist_id',true);
