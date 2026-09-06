@@ -37,7 +37,7 @@ foreach($ids as $id){
         'title'=>get_the_title($id),
         'artist'=>$aname?:'Эфир 24/7',
         'artist_id'=>$aid,
-        'audio'=>$audio,
+        'url'=>$audio,
         'cover'=>orh_media_url($id,'large'),
     ];
 }
