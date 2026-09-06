@@ -5,17 +5,15 @@ on:
     branches:
       - cloudflare-preview
     paths:
-      - 'wordpress-theme/**/*.php'
-      - 'wordpress-theme/assets/*.js'
-      - 'public/assets/*.js'
+      - '**/*.php'
+      - 'assets/*.js'
       - '.github/workflows/php-lint-preview.yml'
   pull_request:
     branches:
       - cloudflare-preview
     paths:
-      - 'wordpress-theme/**/*.php'
-      - 'wordpress-theme/assets/*.js'
-      - 'public/assets/*.js'
+      - '**/*.php'
+      - 'assets/*.js'
       - '.github/workflows/php-lint-preview.yml'
   workflow_dispatch:
 
@@ -38,7 +36,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          files=$(find wordpress-theme -type f -name '*.php' -print)
+          files=$(find . -type f -name '*.php' -not -path './.git/*' -print)
           test -n "$files"
           for file in $files; do
             echo "Linting $file"
@@ -49,5 +47,5 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          node --check wordpress-theme/assets/app.js
+          node --check assets/app.js
           node --check public/assets/app.js
